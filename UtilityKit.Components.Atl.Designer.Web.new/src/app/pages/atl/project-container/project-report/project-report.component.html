@@ -1,0 +1,92 @@
+<div class="d-flex justify-content-between flex-column h-100">
+  <div class="h-40px mh-40px">
+    <!--begin::Page title-->
+    <div
+      class="page-title d-flex justify-content-between align-items-center flex-wrap"
+    >
+      <!--begin::Title-->
+      <h1
+        class="page-heading flex-column d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0"
+      >
+        Project Completeness {{ projectCompletenessValue | number }} %
+      </h1>
+      <!--end::Title-->
+    </div>
+    <!--end::Page title-->
+  </div>
+  <div style="height: calc(100% - 40px)">
+    <div class="d-flex justify-content-between flex-column h-100">
+      <div class="h-100 overflow-auto">
+          <p-table
+            [breakpoint]="'960px'"
+            [scrollable]="true"
+            scrollHeight="flex"
+            [value]="projectReport"
+            [paginator]="true"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+            [rows]="10"
+            [rowHover]="true"
+          >
+            <ng-template pTemplate="header">
+              <tr class="fontstyle">
+                <th style="min-width: 200px" pFrozenColumn>Asset Table</th>
+                <th style="min-width: 200px">Asset Group</th>
+                <th style="min-width: 200px">Asset Type</th>
+                <th style="min-width: 200px">Map Record Order</th>
+                <th style="min-width: 100px" class="text-center">
+                  Comments
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-report>
+              <tr class="fontstyle">
+                <td>{{ report.assetTableName }}</td>
+                <td>{{ report.assetGroupName }}</td>
+                <td>{{ report.assetTypeName }}</td>
+                <td>
+                  <p
+                    [ngClass]="
+                      report.mapRecordOrderInsideAssetGroup > 0
+                        ? ''
+                        : 'text-danger'
+                    "
+                  >
+                    {{
+                      report.mapRecordOrderInsideAssetGroup > 0
+                        ? report.mapRecordOrderInsideAssetGroup
+                        : "No Map Records"
+                    }}
+                  </p>
+                </td>
+
+                
+                <td>
+                  <div
+                    *ngIf="report.completenessCriteriaJson !== null"
+                    class="text-danger"
+                  >
+                    <p
+                      *ngFor="
+                        let completenessCriteria of report.completenessCriteriaJson
+                      "
+                    >
+                      {{ completenessCriteria.comment }}
+                    </p>
+                  </div>
+
+                  <p
+                    class="text-danger"
+                    *ngIf="report.completenessCriteriaJson === null"
+                  >
+                    No Map Records
+                  </p>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        
+      </div>
+    </div>
+  </div>
+</div>

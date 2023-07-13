@@ -1,0 +1,108 @@
+<ng-template let-modal #projectReportTemplate>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4 class="card-title">
+        Project Completeness {{ projectCompletenessValue | number }} %
+      </h4>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          placement="top"
+          ngbTooltip="Close"
+          (click)="close()"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr088.svg'"
+            class="svg-icon svg-icon-muted svg-icon-1"
+          ></span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <div class="card-body py-3 h-400px mh-400px">
+      <div class="h-100 overflow-auto">
+        <p-table
+          [breakpoint]="'960px'"
+          [scrollable]="true"
+          scrollHeight="flex"
+          [value]="projectReport"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
+          [rows]="7"
+          [rowHover]="true"
+        >
+          <ng-template pTemplate="header">
+            <tr class="fontstyle">
+              <th style="min-width: 200px" pFrozenColumn>Asset Table</th>
+              <th style="min-width: 200px">Asset Group</th>
+              <th style="min-width: 200px">Asset Type</th>
+              <th style="min-width: 200px">Number of Mapping records</th>
+              <th style="min-width: 100px" class="text-center">Comments</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-report>
+            <tr class="fontstyle">
+              <td>{{ report.assetTableName }}</td>
+              <td>{{ report.assetGroupName }}</td>
+              <td>{{ report.assetTypeName }}</td>
+              <td>
+                <p
+                  [ngClass]="
+                    report.mapRecordOrderInsideAssetGroup > 0
+                      ? ''
+                      : 'text-danger'
+                  "
+                >
+                  {{
+                    report.mapRecordOrderInsideAssetGroup > 0
+                      ? report.mapRecordOrderInsideAssetGroup
+                      : "No Map Records"
+                  }}
+                </p>
+              </td>
+
+              <td>
+                <div
+                  *ngIf="report.mapRecordCompletenessValue === 100"
+                  class="text-success"
+                >
+                  <p>100 %</p>
+                </div>
+
+                <div
+                  *ngIf="
+                    report.completenessCriteriaJson !== null &&
+                    report.mapRecordCompletenessValue < 100
+                  "
+                  class="text-danger"
+                >
+                  <p
+                    *ngFor="
+                      let completenessCriteria of report.completenessCriteriaJson
+                    "
+                  >
+                    {{ completenessCriteria.comment }}
+                  </p>
+                </div>
+
+                <p
+                  class="text-danger"
+                  *ngIf="report.completenessCriteriaJson === null"
+                >
+                  No Map Records
+                </p>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+
+    <div class="card-footer py-5 text-end">
+      <button type="button" class="btn btn-sm btn-secondary" (click)="close()">
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>

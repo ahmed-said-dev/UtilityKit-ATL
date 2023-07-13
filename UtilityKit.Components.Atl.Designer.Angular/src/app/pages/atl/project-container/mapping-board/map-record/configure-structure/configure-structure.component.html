@@ -1,0 +1,108 @@
+<div class="card card-bordered h-100">
+  <div
+    class="card-header d-flex justify-content-between align-items-center border-0 h-70px mh-70px"
+  >
+    <!--begin::Page title-->
+    <div class="d-flex">
+      <button
+        type="button"
+        (click)="close()"
+        class="btn btn-flex ps-2 pe-0 btn-sm btn-dark me-4"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr063.svg'"
+          class="svg-icon svg-icon-3"
+        ></span>
+      </button>
+      <!--begin::Title-->
+      <h1
+        class="page-heading flex-column d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0"
+      >
+        Configure Structure Attachments Settings
+        <span class="text-muted fs-7 fw-normal mt-2"
+          >(47-7) ATL_GDB - Insert to - AssetType1
+        </span>
+      </h1>
+      <!--end::Title-->
+    </div>
+    <!--end::Page title-->
+  </div>
+  <div class="card-body py-3" style="height: calc(100% - 140px)">
+    <form [formGroup]="configureStructureForm">
+      <div class="col-12 mb-4">
+        <label for="spatialRelation" class="form-label required"
+          >Spatial Relation</label
+        >
+        <select
+          class="form-select form-select-sm"
+          id="spatialRelation"
+          formControlName="spatialRelation"
+          [ngbTooltip]="spatialRelation?.invalid && (spatialRelation?.dirty || spatialRelation?.touched) && spatialRelation?.errors?.['required'] ? spatialRelationRequired : ''"
+          [ngClass]="{'is-invalid': spatialRelation?.invalid && (spatialRelation?.dirty || spatialRelation?.touched) && (spatialRelation?.errors?.['required'])}"
+        >
+          <option [value]="null" selected disabled>
+            Select Spatial Relation
+          </option>
+          <option [value]="spatialRelationShip.contain">Contain</option>
+          <option [value]="spatialRelationShip.intersect">Intersect</option>
+        </select>
+        <ng-template placement="top right" #spatialRelationRequired>
+          <span class="text-danger"
+            >Spatial relation is required!</span
+          ></ng-template
+        >
+      </div>
+      <div class="row d-flex justify-items-center">
+        <div
+          class="d-flex justify-items-center align-content-center align-items-center"
+        >
+          <div class="col mb-2">
+            <!--begin::Card-->
+            <div class="card">
+              <input type="hidden" formControlName="tree" />
+              <div *ngIf="tree?.invalid">
+                <div class="text-danger" *ngIf="tree?.errors?.['required']">
+                  Should select at least one from tree.
+                </div>
+              </div>
+              <p-tree
+                [value]="treeDataSource"
+                selectionMode="checkbox"
+                [(selection)]="selectedAsset"
+                (onNodeSelect)="nodeSelect()"
+                (onNodeUnselect)="nodeUnSelect()"
+                scrollHeight="300px"
+                class="tree"
+              ></p-tree>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div
+    class="card-footer py-5 d-flex justify-content-end align-items-center h-70px mh-70px"
+  >
+    <button
+      type="button"
+      class="btn btn-sm btn-secondary me-2"
+      (click)="delete()"
+      [disabled]="!(this.dataArray.length > 0)"
+    >
+      <span>Delete</span>
+
+      <!-- <span [ngClass]="deleting ? 'inprogress' : ''">Delete</span> -->
+    </button>
+    <button type="button" class="btn btn-sm btn-secondary me-2" (click)="close()">
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-sm btn-dark"
+      (click)="save()"
+      [disabled]="!configureStructureForm.valid || saving"
+    >
+      <span [ngClass]="saving ? 'inprogress' : ''">Save Changes</span>
+    </button>
+  </div>
+</div>

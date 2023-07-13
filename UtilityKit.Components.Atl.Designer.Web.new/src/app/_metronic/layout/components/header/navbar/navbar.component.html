@@ -1,0 +1,76 @@
+<!--begin::Info-->
+<div class="app-navbar-item" [ngClass]="itemClass">
+  <!--begin::Menu wrapper-->
+  <div
+    [ngClass]="btnClass"
+    data-kt-menu-trigger="click"
+    data-kt-menu-attach="parent"
+    data-kt-menu-placement="bottom-end"
+  >
+    <span
+      [inlineSVG]="'./assets/media/icons/duotune/general/gen046.svg'"
+      class="svg-icon"
+      [ngClass]="btnIconClass"
+    ></span>
+  </div>
+  <!--end::Menu wrapper-->
+</div>
+<!--end::Info-->
+
+<!--begin::Quick links-->
+<div class="app-navbar-item" [ngClass]="itemClass">
+  <!--begin::Menu wrapper-->
+  <div
+    [ngClass]="btnClass"
+    data-kt-menu-trigger="click"
+    data-kt-menu-attach="parent"
+    data-kt-menu-placement="bottom-end"
+  >
+    <span
+      [inlineSVG]="'./assets/media/icons/duotune/general/gen025.svg'"
+      class="svg-icon"
+      [ngClass]="btnIconClass"
+    ></span>
+  </div>
+  <!--end::Menu wrapper-->
+  <app-quick-links-inner></app-quick-links-inner>
+</div>
+<!--end::Quick links-->
+
+<!--begin::Theme mode-->
+<div class="app-navbar-item ">
+<div>
+    <app-theme-mode-switcher
+    [toggleBtnClass]="btnClass"
+    toggleBtnClass="{`btn-active-light-primary btn-custom ${toolbarButtonHeightClass}`}"
+  >
+  </app-theme-mode-switcher>
+</div>
+</div>
+<!--end::Theme mode-->
+
+<!--begin::User menu-->
+<div class="app-navbar-item" [ngClass]="itemClass">
+  <!--begin::Menu wrapper-->
+  <div
+    class="cursor-pointer symbol"
+    [ngClass]="userAvatarClass"
+    data-kt-menu-trigger="{default: 'click'}"
+    data-kt-menu-attach="parent"
+    data-kt-menu-placement="bottom-end"
+  >
+    <!--begin::Symbol-->
+    <div class="symbol symbol-40px symbol-md-50px">
+      <div
+        class="symbol-label fs-2 fw-semibold bg-primary text-inverse-primary"
+      >
+        SA
+      </div>
+
+      <!--end::Symbol-->
+    </div>
+    <app-user-inner data-kt-menu="true"></app-user-inner>
+    <!--end::Menu wrapper-->
+  </div>
+  <!--end::User menu-->
+</div>

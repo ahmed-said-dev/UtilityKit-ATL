@@ -1,0 +1,230 @@
+<div class="d-flex flex-column flex-lg-row flex-column-fluid vh-100">
+  <div
+    class="d-flex flex-column flex-lg-row-fluid w-lg-75 p-10 order-2 order-lg-2 overflow-auto"
+  >
+    <div
+      class="d-flex align-items-stretch justify-content-between mb-4"
+      id="kt_header_container"
+    >
+      <div
+        class="d-flex align-items-stretch justify-content-end flex-lg-grow-1"
+      >
+        <div class="d-flex align-items-stretch flex-shrink-0">
+          <!--begin::Settings-->
+          <div class="d-flex align-items-center">
+            <div [ngClass]="btnClass" placement="left" ngbTooltip="Help">
+              <span class="svg-icon" [ngClass]="toolbarButtonIconSizeClass">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect
+                    opacity="0.3"
+                    x="2"
+                    y="2"
+                    width="20"
+                    height="20"
+                    rx="10"
+                    fill="currentColor"
+                  />
+                  <path
+                    d="M11.276 13.654C11.276 13.2713 11.3367 12.9447 11.458 12.674C11.5887 12.394 11.738 12.1653 11.906 11.988C12.0833 11.8107 12.3167 11.61 12.606 11.386C12.942 11.1247 13.1893 10.896 13.348 10.7C13.5067 10.4947 13.586 10.2427 13.586 9.944C13.586 9.636 13.4833 9.356 13.278 9.104C13.082 8.84267 12.69 8.712 12.102 8.712C11.486 8.712 11.066 8.866 10.842 9.174C10.6273 9.482 10.52 9.82267 10.52 10.196L10.534 10.574H8.826C8.78867 10.3967 8.77 10.2333 8.77 10.084C8.77 9.552 8.90067 9.07133 9.162 8.642C9.42333 8.20333 9.81067 7.858 10.324 7.606C10.8467 7.354 11.4813 7.228 12.228 7.228C13.1987 7.228 13.9687 7.44733 14.538 7.886C15.1073 8.31533 15.392 8.92667 15.392 9.72C15.392 10.168 15.322 10.5507 15.182 10.868C15.042 11.1853 14.874 11.442 14.678 11.638C14.482 11.834 14.2253 12.0533 13.908 12.296C13.544 12.576 13.2733 12.8233 13.096 13.038C12.928 13.2527 12.844 13.528 12.844 13.864V14.326H11.276V13.654ZM11.192 15.222H12.928V17H11.192V15.222Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </span>
+            </div>
+          </div>
+          <!--end::Settings-->
+
+          <!--begin::Notifications-->
+          <div class="d-flex align-items-center" [ngClass]="itemClass">
+            <!--begin::Menu- wrapper-->
+            <div
+              [ngClass]="btnClass"
+              class="position-relative"
+              data-kt-menu-trigger="click"
+              data-kt-menu-attach="parent"
+              placement="left"
+              ngbTooltip="Applications"
+              data-kt-menu-placement="bottom-end"
+            >
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/general/gen060.svg'"
+                class="svg-icon theme-dark-hide"
+              ></span>
+            </div>
+            <!--end::Menu wrapper-->
+          </div>
+          <!--end::Notifications-->
+
+          <!--begin::Notifications-->
+          <div class="d-flex align-items-center" [ngClass]="itemClass">
+            <!--begin::Menu- wrapper-->
+            <div
+              [ngClass]="btnClass"
+              class="position-relative"
+              data-kt-menu-trigger="click"
+              data-kt-menu-attach="parent"
+              placement="left"
+              ngbTooltip="Applications"
+              data-kt-menu-placement="bottom-end"
+            >
+              <span
+                [inlineSVG]="'./assets/media/icons//duotune/layouts/lay002.svg'"
+                class="svg-icon"
+                [ngClass]="toolbarButtonIconSizeClass"
+              ></span>
+            </div>
+            <!--end::Menu wrapper-->
+          </div>
+          <!--end::Notifications-->
+          <!--begin::User-->
+          <div
+            class="d-flex align-items-center ms-lg-5"
+            id="kt_header_user_menu_toggle"
+          >
+            <!--begin::User info-->
+            <div
+              class="btn btn-active-light d-flex align-items-center bg-hover-light py-2 px-2 px-md-3"
+              data-kt-menu-trigger="click"
+              data-kt-menu-attach="parent"
+              data-kt-menu-placement="bottom-end"
+            >
+              <!--begin::Name-->
+              <div
+                class="d-none d-md-flex flex-column align-items-end justify-content-center me-2"
+              >
+                <span class="text-muted fs-7 fw-bold lh-1 mb-2">Hello</span>
+                <span class="text-dark fs-base fw-bolder lh-1"
+                  >System Admin</span
+                >
+              </div>
+              <!--end::Name-->
+
+              <!--begin::Symbol-->
+              <div class="symbol symbol-30px symbol-md-40px">
+                <div class="symbol symbol-30px symbol-md-40px ms-2">
+                  <div
+                    class="symbol-label fs-2 fw-semibold bg-primary text-inverse-primary"
+                  >
+                    SA
+                  </div>
+                </div>
+                <!--end::Symbol-->
+              </div>
+              <!--end::User info-->
+
+              <!-- <app-user-inner></app-user-inner> -->
+            </div>
+            <!--end::User -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="separator mb-6 mb-xl-9"></div>
+    <!--begin::Toolbar-->
+    <div class="toolbar d-flex flex-stack flex-wrap mb-5 mb-lg-7">
+      <!--begin::Page title-->
+      <div class="page-title d-flex flex-column py-1">
+        <!--begin::Title-->
+        <h1 class="d-flex align-items-center my-1">
+          <span class="text-dark fw-bold fs-1"
+            >Select Template for Quick Start</span
+          >
+        </h1>
+
+        <!--end::Title-->
+      </div>
+
+      <!--end::Page title-->
+    </div>
+    <!--end::Toolbar-->
+    <div class="pe-6 hover-scroll-overlay-y">
+      <div class="row">
+        <div class="col-xl-3 my-2">
+          <div
+            class="btn btn-outline btn-outline-dashed btn-active-light-primary h-100 w-100"
+          >
+            <div
+              class="d-flex justify-content-center justify-items-center align-items-center align-content-center text-center flex-column h-100px p-5 cursor-pointer text-gray-800"
+            >
+              <div>
+                <span
+                  [inlineSVG]="
+                    './assets/media/icons/duotune/splash/project-creation/atl.svg'
+                  "
+                  class="svg-icon svg-icon-4hx"
+                ></span>
+
+                <div class="fs-5 fw-bold mt-5">ATL Template Test</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="w-lg-25 ps-4 ps-lg-0 pe-4 me-1 d-flex flex-lg-row-fluid flex-column order-1 order-lg-1 bg-light-info"
+    id="kt_aside_menu_wrapper"
+  >
+    <div class="pt-7 pt-lg-15 px-5 px-xl-10 w-100 bg-light-info sticky-top">
+      <a class="mb-0 mb-lg-12">
+        <img
+          alt="Logo"
+          src="assets/media/logos/demo5.svg"
+          class="h-50px h-lg-60px"
+        />
+      </a>
+      <div
+        class="toolbar d-flex flex-stack flex-wrap my-5 my-lg-10"
+        id="kt_toolbar"
+      ></div>
+      <div class="row">
+        <!--begin::Col-->
+        <div class="col-lg-12 mb-5" (click)="openCreateBlankATL()">
+          <button class="btn-check"></button>
+          <!--begin::Option-->
+
+          <label
+            class="btn btn-outline btn-outline-dashed btn-active-light-primary p-4 d-flex align-items-center"
+          >
+            <!--begin::Svg Icon | path: icons/duotune/finance/fin006.svg-->
+            <span
+              [inlineSVG]="
+                './assets/media/icons/duotune/splash/project-creation/atl-new.svg'
+              "
+              class="svg-icon svg-icon-3hx"
+            ></span>
+            <!--end::Svg Icon-->
+            <!--begin::Info-->
+            <span class="d-block fw-semibold text-start">
+              <span class="text-dark fw-bold d-block fs-4">
+                Create Blank ATL</span
+              >
+
+            </span>
+            <!--end::Info-->
+          </label>
+          <!--end::Option-->
+        </div>
+        <!--end::Col-->
+      </div>
+
+    </div>
+    <div class="px-5 px-xl-10 w-100 hover-scroll-overlay-y">
+      <div class="row">
+        <app-project-list #projectList></app-project-list>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-create-blank
+  #createBalnkModal
+  (closeModalEvent)="onCloseBlankATL($event)"
+></app-create-blank>

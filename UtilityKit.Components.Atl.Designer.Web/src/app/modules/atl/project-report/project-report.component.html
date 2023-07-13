@@ -1,0 +1,42 @@
+<h3>Project Completeness {{ projectCompletenessValue }}%</h3>
+<table>
+  <tr>
+    <th>Asset Table</th>
+    <th>Asset Group</th>
+    <th>Map Record Order</th>
+
+    <th>Asset Type</th>
+    <th>Map Record Id's</th>
+  </tr>
+
+  <tr *ngFor="let report of projectReport">
+    <td>{{ report.assetTableName }}</td>
+    <td>{{ report.assetGroupName }}</td>
+    <td>
+      <p
+        [ngClass]="
+          report.mapRecordOrderInsideAssetGroup > 0 ? '' : 'text-danger'
+        "
+      >
+        {{
+          report.mapRecordOrderInsideAssetGroup > 0
+            ? report.mapRecordOrderInsideAssetGroup
+            : "No Map Records"
+        }}
+      </p>
+    </td>
+
+    <td>{{ report.assetTypeName }}</td>
+    <td *ngIf="report.completenessCriteriaJson != null">
+      <p
+        class="text-danger"
+        *ngFor="let completenessCriteria of report.completenessCriteriaJson"
+      >
+        {{ completenessCriteria.comment }}
+      </p>
+    </td>
+    <td *ngIf="report.completenessCriteriaJson == null">
+      <p class="text-danger">No Map Records</p>
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,32 @@
+<div
+  class="h-100 d-flex flex-column justify-content-center align-content-center align-items-center justify-items-center"
+>
+  <div class="w-lg-50 text-center">
+    <img
+      src="./assets/media/backgrounds/add-file.gif"
+      class="w-50"
+      alt="add-file"
+    />
+    <h1 class="text-primary fw-semibold fs-2qx my-5">
+      Asset Transform &amp; Load
+    </h1>
+    <p class="text-center fw-medium lh-lg text-gray-400 my-lg-3">
+      Assets Transform & Load is a migration planning tool for loading data from
+      different sources to the utility network data model defined in the
+      UtilityKit Designer tool.
+      <br />
+      ATL supports more than one data source in the same project from different
+      6 types of data sources.
+    </p>
+    <button
+      class="btn btn-primary btn-lg w-lg-300px mt-lg-7"
+      (click)="createBlankProject()"
+    >
+      Create New ATL Project
+    </button>
+  </div>
+</div>
+<app-create-blank
+  #createBalnkModal
+  (closeModalEvent)="onCloseBlankATL($event)"
+></app-create-blank>

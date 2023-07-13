@@ -1,0 +1,203 @@
+<!--begin::Toolbar-->
+<div class="toolbar d-flex flex-stack flex-wrap mb-5 mb-lg-7">
+  <!--begin::Page title-->
+  <div class="page-title d-flex flex-column py-1">
+    <!--begin::Title-->
+    <h1 class="d-flex align-items-start flex-column">
+      <span class="text-dark fw-bold fs-1 mb-2">Mapping Board</span>
+    </h1>
+    <!--end::Title-->
+  </div>
+  <!--end::Page title-->
+  <!--begin::Actions-->
+  <div class="d-flex align-items-center py-1">
+    <!--begin::Button-->
+
+    <a class="btn btn-flex btn-sm btn-secondary fw-bold border-0 fs-6 me-3"
+      ><!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+      <span class="svg-icon svg-icon-2">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            opacity="0.3"
+            x="8.5"
+            y="11"
+            width="12"
+            height="2"
+            rx="1"
+            fill="currentColor"
+          />
+          <path
+            d="M10.3687 11.6927L12.1244 10.2297C12.5946 9.83785 12.6268 9.12683 12.194 8.69401C11.8043 8.3043 11.1784 8.28591 10.7664 8.65206L7.84084 11.2526C7.39332 11.6504 7.39332 12.3496 7.84084 12.7474L10.7664 15.3479C11.1784 15.7141 11.8043 15.6957 12.194 15.306C12.6268 14.8732 12.5946 14.1621 12.1244 13.7703L10.3687 12.3073C10.1768 12.1474 10.1768 11.8526 10.3687 11.6927Z"
+            fill="currentColor"
+          />
+          <path
+            opacity="0.5"
+            d="M16 5V6C16 6.55228 15.5523 7 15 7C14.4477 7 14 6.55228 14 6C14 5.44772 13.5523 5 13 5H6C5.44771 5 5 5.44772 5 6V18C5 18.5523 5.44771 19 6 19H13C13.5523 19 14 18.5523 14 18C14 17.4477 14.4477 17 15 17C15.5523 17 16 17.4477 16 18V19C16 20.1046 15.1046 21 14 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H14C15.1046 3 16 3.89543 16 5Z"
+            fill="currentColor"
+          />
+        </svg>
+      </span>
+      <!--end::Svg Icon-->Export
+    </a>
+    <a
+      class="btn btn-flex btn-sm btn-primary fw-bold border-0 fs-6 me-3"
+      (click)="viewExecutionPlan()"
+      ><!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/arrows/arr027.svg'"
+        class="svg-icon svg-icon-2"
+      ></span>
+      <!--end::Svg Icon-->Execution Plan
+    </a>
+    <!--end::Button-->
+  </div>
+  <!--end::Actions-->
+</div>
+<!--end::Toolbar-->
+
+<!--begin::Card-->
+<div class="card mb-4">
+  <!--begin::Card body-->
+  <div class="card-body">
+    <div class="d-flex">
+      <div class="me-5">
+        <label for="" class="form-label">Network</label>
+        <select
+          name="selectedNetworkId"
+          [(ngModel)]="selectedNetworkId"
+          (change)="onChangeNetwork($event)"
+          class="form-select form-select-sm min-w-200px"
+          aria-label="network"
+        >
+          <option value="0" selected disabled>Select Network</option>
+          <option [value]="network.id" *ngFor="let network of networks">
+            {{ network.name }}
+          </option>
+        </select>
+      </div>
+      <div class="me-5">
+        <label for="selectedAssetTableId" class="form-label">Asset Table</label>
+        <select
+          name="selectedAssetTableId"
+          [(ngModel)]="selectedAssetTableId"
+          (change)="onChangeAssetTable($event)"
+          [disabled]="selectedNetworkId === '0'"
+          class="form-select form-select-sm min-w-200px"
+          aria-label="assetTable"
+        >
+          <option value="0" selected disabled>Select Asset Table</option>
+          <option
+            [value]="assetTable.id"
+            *ngFor="let assetTable of assetTables"
+          >
+            {{ assetTable.name }}
+          </option>
+        </select>
+      </div>
+      <div class="me-5">
+        <label for="selectedAssetGroupId" class="form-label">Asset Group</label>
+        <select
+          name="selectedAssetGroupId"
+          [(ngModel)]="selectedAssetGroupId"
+          (change)="onChangeAssetGroup($event)"
+          [disabled]="selectedAssetTableId === '0'"
+          class="form-select form-select-sm min-w-200px"
+          aria-label="assetGroup"
+        >
+          <option value="0" selected disabled>Select Asset Group</option>
+          <option
+            [value]="assetGroup.id"
+            *ngFor="let assetGroup of assetGroups"
+          >
+            {{ assetGroup.name }}
+          </option>
+        </select>
+      </div>
+      <div class="me-5">
+        <label for="" class="form-label">Status</label>
+        <select
+          class="form-select form-select-sm min-w-200px"
+          (change)="onChangeOnlyMapped($event)"
+        >
+          <option value="0" selected disabled>Select Status</option>
+          <option value="All">All</option>
+          <option value="Mapped">Mapped</option>
+          <option value="NotMapped">Not Mapped</option>
+        </select>
+      </div>
+    </div>
+  </div>
+  <!--end::Card body-->
+</div>
+<!--end::Card-->
+<div class="card">
+  <div class="card-body card-scroll p-3 max-h-400px h-xl-400px">
+    <div
+      class="card mb-4"
+      *ngFor="let filteredAssetTable of filteredAssetTables"
+    >
+      <div class="card-body card-scroll pb-0">
+        <h3 class="card-title mb-10">
+          <span
+            [inlineSVG]="'./assets/media/icons//duotune/aside/featureclass.svg'"
+            class="svg-icon svg-icon-2hx me-3"
+          ></span>
+          {{ filteredAssetTable.name }}
+        </h3>
+        <div class="row">
+          <div class="col-12 mb-4">
+            <ul class="nav nav-pills nav-pills-custom mb-3" role="tablist">
+              <!--begin::Item-->
+              <li
+                class="nav-item mb-3 me-3 me-lg-6"
+                role="presentation"
+                *ngFor="let assetGroup of filteredAssetTable.assetGroups"
+              >
+                <!--begin::Link-->
+                <a
+                  class="nav-link d-flex justify-content-between flex-column flex-center overflow-hidden border border-hover-secondary cursor-pointer border-dashed border-1 active w-150px h-85px py-4"
+                  data-bs-toggle="pill"
+                  aria-selected="true"
+                  role="tab"
+                  (click)="onClickAssetGroup(assetGroup)"
+                >
+                  <!--begin::Icon-->
+                  <div class="nav-icon">
+                    <!--begin::Svg Icon | path: icons/duotune/finance/fin006.svg-->
+                    <span
+                      [inlineSVG]="
+                        './assets/media/icons/duotune/files/fil003.svg'
+                      "
+                      class="svg-icon svg-icon-3x mb-3 me-0"
+                    ></span>
+                    <!--end::Svg Icon-->
+                  </div>
+                  <!--end::Icon-->
+                  <!--begin::Subtitle-->
+                  <span class="nav-text text-gray-700 fw-bold fs-6 lh-1">{{
+                    assetGroup.name
+                  }}</span>
+                  <!--end::Subtitle-->
+                  <!--begin::Bullet-->
+                  <span
+                    class="bullet-custom position-absolute bottom-0 w-100 h-4px"
+                    [ngClass]="assetGroup.isMapped ? 'bg-success' : 'bg-none'"
+                  ></span>
+                  <!--end::Bullet-->
+                </a>
+                <!--end::Link-->
+              </li>
+              <!--end::Item-->
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

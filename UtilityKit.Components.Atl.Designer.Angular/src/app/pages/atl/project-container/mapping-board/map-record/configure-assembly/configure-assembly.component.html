@@ -1,0 +1,118 @@
+<ng-template let-modal #configureAssemblyTemplate>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Manage Assembly Settings</h3>
+      <div class="card-toolbar">
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+ 
+          (click)="close()"
+        >
+          <span class="svg-icon svg-icon-muted svg-icon-1"
+            ><svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                opacity="0.5"
+                x="7.05025"
+                y="15.5356"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(-45 7.05025 15.5356)"
+                fill="currentColor"
+              />
+              <rect
+                x="8.46447"
+                y="7.05029"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(45 8.46447 7.05029)"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <!--end::Svg Icon-->
+        </div>
+      </div>
+    </div>
+    <div class="card-body card-scroll h-500px max-h-500px">
+      <form [formGroup]="configureAssemblyForm">
+        <div class="col-12 mb-4">
+          <label for="spatialRelation" class="form-label required"
+            >Spatial Relation</label
+          >
+          <select
+            class="form-select form-select-sm"
+            id="spatialRelation"
+            formControlName="spatialRelation"
+            [ngbTooltip]="spatialRelation?.invalid && (spatialRelation?.dirty || spatialRelation?.touched) && spatialRelation?.errors?.['required'] ? spatialRelationRequired : ''"
+            [ngClass]="{'is-invalid': spatialRelation?.invalid && (spatialRelation?.dirty || spatialRelation?.touched) && (spatialRelation?.errors?.['required'])}"
+          >
+            <option [value]="null" selected disabled>
+              Select Spatial Relation
+            </option>
+            <option [value]="spatialRelationShip.contain">Contain</option>
+            <option [value]="spatialRelationShip.intersect">Intersect</option>
+          </select>
+          <ng-template placement="top right" #spatialRelationRequired>
+            <span class="text-danger"
+              >Spatial relation is required!</span
+            ></ng-template
+          >
+        </div>
+        <div class="row d-flex justify-items-center">
+          <div
+            class="d-flex justify-items-center align-content-center align-items-center"
+          >
+            <div class="col mb-2">
+              <!--begin::Card-->
+              <div class="card h-350px">
+                <input type="hidden" formControlName="tree" />
+                <div *ngIf="tree?.invalid">
+                  <div class="text-danger" *ngIf="tree?.errors?.['required']">
+                    Should select at least one from tree.
+                  </div>
+                </div>
+                <p-tree
+                  [value]="treeDataSource"
+                  selectionMode="checkbox"
+                  [(selection)]="selectedAsset"
+                  (onNodeSelect)="nodeSelect()"
+                  (onNodeUnselect)="nodeUnSelect()"
+                ></p-tree>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer py-5 text-end">
+      <button
+        type="button"
+        class="btn btn-sm btn-secondary me-2"
+        (click)="delete()"
+        [disabled]="!(this.dataArray.length > 0)"
+      >
+        <span>Delete</span>
+        <!-- <span [ngClass]="deleting ? 'inprogress' : ''">Delete</span> -->
+      </button>
+      <button type="button" class="btn btn-sm btn-secondary me-2" (click)="close()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-dark"
+        (click)="save()"
+        [disabled]="!configureAssemblyForm.valid || saving"
+      >
+        <span [ngClass]="saving ? 'inprogress' : ''">Save Changes</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

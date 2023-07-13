@@ -1,0 +1,220 @@
+<ng-template let-modal #fieldMappingComponent>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Table Name</h3>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          (click)="close()"
+        >
+          <span class="svg-icon svg-icon-muted svg-icon-1"
+            ><svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                opacity="0.5"
+                x="7.05025"
+                y="15.5356"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(-45 7.05025 15.5356)"
+                fill="currentColor"
+              />
+              <rect
+                x="8.46447"
+                y="7.05029"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(45 8.46447 7.05029)"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="fieldMapForm">
+        <div class="row">
+          <div class="col-12 mb-2">
+            <div class="bg-gray-100 px-8 py-4 rounded">
+              <div class="d-flex justify-content-between">
+                <div class="w-100">
+                  <div class="row">
+                    <div class="col-8 mb-4">
+                      <label for="" class="form-label">Filter</label>
+                      <select
+                        class="form-select form-select-sm"
+                        aria-label="type"
+                        formControlName="filter"
+                      >
+                        <option [value]="null" disabled>Select Filter</option>
+                        <option>One</option>
+                        <option>Two</option>
+                        <option>Three</option>
+                      </select>
+                    </div>
+                    <div class="col-4 mb-4">
+                      <label for="" class="form-label">Status</label>
+                      <select
+                        class="form-select form-select-sm"
+                        aria-label="type"
+                        formControlName="status"
+                      >
+                        <option [value]="null" disabled>Select Status</option>
+                        <option>All</option>
+                        <option>Mapped</option>
+                        <option>Not Mapped</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex-shrink-0 ms-4 mb-4 d-flex align-items-end">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-secondary me-2"
+                    (click)="openAutoMap()"
+                  >
+                    <span
+                      [inlineSVG]="
+                        './assets/media/icons/duotune/arrows/arr034.svg'
+                      "
+                      class="svg-icon svg-icon-3 me-2"
+                    ></span>
+                    Auto Mapping
+                  </button>
+
+                  <button type="button" class="btn btn-sm btn-secondary">
+                    A-Z
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="card card-bordered card-scroll h-300px max-h-300px">
+              <div class="card-body">
+                <div formArrayName="fieldMapFormArray">
+                  <div
+                    *ngFor="
+                      let fieldMapRecordForm of fieldMapFormArray.controls;
+                      let i = index
+                    "
+                    [formGroupName]="i"
+                  >
+                    <div class="field-item">
+                      <div class="d-flex justify-content-between">
+                        <div class="w-100">
+                          <!--begin::Input group-->
+                          <div class="input-group input-group-sm">
+                            <input
+                              formControlName="destinationFieldName"
+                              class="input-group-text w-50"
+                              id="basic-addon1"
+                              [disabled]="true"
+                              [readonly]="true"
+                            />
+
+                            <select
+                              class="form-select form-select-sm"
+                              aria-label="type"
+                              formControlName="sourceFieldName"
+                              (change)="
+                                handleSelectSourceFiled(fieldMapRecordForm)
+                              "
+                            >
+                              <option [value]="null" disabled>
+                                Select Field
+                              </option>
+
+                              <option
+                                *ngFor="let dataSourceField of dataSourceFields"
+                                [value]="dataSourceField.name"
+                              >
+                                {{ dataSourceField.name }}
+                              </option>
+                            </select>
+                          </div>
+                          <label
+                            class="text-muted my-2"
+                            *ngIf="
+                              fieldMapRecordForm.get('isNull')?.value == true
+                            "
+                            >is Null</label
+                          >
+                          <!--end::Input group-->
+                        </div>
+                        <div class="flex-shrink-0 ms-4">
+                          <a
+                            placement="left"
+                            ngbTooltip="Replacement Filter"
+                            (click)="openReplacementFilter(fieldMapRecordForm)"
+                            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"
+                          >
+                            <span
+                              [inlineSVG]="
+                                './assets/media/icons/duotune/general/gen031.svg'
+                              "
+                              class="svg-icon svg-icon-3"
+                            ></span>
+
+                            <!--end::Svg Icon-->
+                          </a>
+                          <a
+                            placement="left"
+                            ngbTooltip="Static Value"
+                            (click)="openStaticValue(fieldMapRecordForm)"
+                            class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"
+                          >
+                            <i class="fa-solid fa-hashtag"></i>
+
+                            <!--end::Svg Icon-->
+                          </a>
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-light me-2"
+                            (click)="setNull(fieldMapRecordForm)"
+                          >
+                            Null
+                          </button>
+                        </div>
+                      </div>
+                      <div class="separator mb-4"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer text-end">
+      <button type="button" class="btn btn-sm btn-light me-2" (click)="close()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-primary"
+        [disabled]="!fieldMapForm.valid || saving"
+        (click)="save()"
+      >
+        <span [ngClass]="saving ? 'inprogress' : ''">Save</span>
+      </button>
+    </div>
+  </div>
+  <!-- {{ this.fieldMapForm.value | json }} -->
+</ng-template>
+
+<app-replacement-filter #replacementFilterComponent></app-replacement-filter>
+<app-static-value #staticValueComponent></app-static-value>
+<app-auto-map #autoMapComponent></app-auto-map>

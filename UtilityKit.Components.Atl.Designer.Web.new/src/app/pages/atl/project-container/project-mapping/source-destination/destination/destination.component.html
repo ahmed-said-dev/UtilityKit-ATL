@@ -1,0 +1,182 @@
+<div class="d-flex flex-column justify-content-between h-100">
+  <div class="h-50px mh-50px h-lg-50px">
+    <div
+      class="d-flex justify-content-between align-items-center heading-gradient ps-4 mb-4 h-50px mh-50px"
+    >
+      <!--begin::Title-->
+      <h4 class="page-heading fs-4 my-0">Destination Connection</h4>
+      <!--end::Title-->
+      <!--begin::Toolbar-->
+      <div class="card-toolbar">
+        <a
+          class="btn btn-flex btn-sm btn-color-primary"
+          data-kt-menu-trigger="click"
+          data-kt-menu-placement="bottom-end"
+          placement="left"
+          ngbTooltip="Quick Actions"
+        >
+          <i class="fa-solid fa-ellipsis fs-3"></i>
+        </a>
+        <div
+          class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light fw-semibold w-200px py-4"
+          data-kt-menu="true"
+        >
+          <div class="menu-item">
+            <a
+              class="menu-link px-4 btn btn-sm btn-active-light text-hover-primary"
+            >
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/arrows/arr029.svg'"
+                class="svg-icon svg-icon-1x me-2"
+              ></span>
+              Refresh</a
+            >
+          </div>
+          <div class="menu-item">
+            <a
+              class="menu-link px-4 btn btn-sm btn-active-light text-hover-primary"
+              *ngIf="isATLConnectUND"
+              (click)="handleDisconnect(undHasMapRecords)"
+            >
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/coding/cod008.svg'"
+                class="svg-icon svg-icon-1x me-2"
+              ></span>
+              Disconnect</a
+            >
+          </div>
+        </div>
+      </div>
+      <!--end::Toolbar-->
+    </div>
+  </div>
+  <div class="flex-grow-1 overflow-auto py-4" *ngIf="!isATLConnectUND">
+    <div
+      class="text-center border border-2 border-dashed border-primary rounded h-100 w-100 d-flex flex-column align-content-center justify-content-center align-items-center"
+    >
+      <img
+        src="./assets/media/backgrounds/add-file.gif"
+        class="w-100px"
+        alt="add-file"
+      />
+      <h1 class="text-primary fw-semibold fs-4 mt-4">Connect to UND</h1>
+      <span class="text-center fs-8 fw-medium text-gray-400 mb-lg-3 w-75">
+        Connect to one of the UtilityKit Designer projects to set up the
+        destination data model for planning the migration project.
+      </span>
+      <button
+        class="btn btn-primary btn-sm w-lg-200px"
+        (click)="openConnectToUnd()"
+      >
+        Select UND File to Connect
+      </button>
+    </div>
+  </div>
+  <div class="flex-grow-1 overflow-auto py-4" *ngIf="isATLConnectUND">
+    <ul class="nav nav-tabs nav-line-tabs nav-line-tabs-2x fw-semibold mb-4">
+      <li
+        class="nav-item cursor-pointer"
+        (click)="changeTab(tabs.STRUCTURE_TAB)"
+      >
+        <a
+          class="nav-link text-active-primary"
+          data-bs-toggle="tab"
+          [attr.aria-selected]="activeTabId === tabs.STRUCTURE_TAB"
+          [class.active]="activeTabId === tabs.STRUCTURE_TAB"
+        >
+          <!-- {{
+            structure.name
+          }} Network
+           -->
+          Structure Network
+        </a>
+      </li>
+      <li class="nav-item cursor-pointer" (click)="changeTab(tabs.DOMAIN_TAB)">
+        <a
+          class="nav-link text-active-primary"
+          data-bs-toggle="tab"
+          [attr.aria-selected]="activeTabId === tabs.DOMAIN_TAB"
+          [class.active]="activeTabId === tabs.DOMAIN_TAB"
+        >
+          <!-- {{
+            domin.name
+          }} Network -->
+          Domain Network
+        </a>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <ng-container *ngIf="activeTabId === tabs.STRUCTURE_TAB">
+        <div class="px-3" *ngFor="let structure of undProjectStructure">
+          <div class="row">
+            <div class="col-4" *ngFor="let assetTable of structure.assetTables">
+              <div
+                class="card border border-hover-primary border-active-primary mb-4 h-80px overflow-hidden cursor-pointer overflow-hidden"
+                routerLinkActive="active"
+              >
+                <div
+                  class="card-body p-4 py-2 d-flex flex-column justify-content-end"
+                >
+                  <div class="text-end icon-position">
+                    <span
+                      [inlineSVG]="
+                        './assets/media/icons//duotune/aside/featureclass.svg'
+                      "
+                      class="svg-icon svg-icon svg-icon-primary svg-icon-2x"
+                    ></span>
+                  </div>
+
+                  <div class="fw-bold fs-2">
+                    {{ assetTable?.assetGroups?.length }}
+                  </div>
+
+                  <div class="fw-semibold" [ngClass]="'fs-7'">
+                    {{ assetTable.name }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="activeTabId === tabs.DOMAIN_TAB">
+        <div class="px-3" *ngFor="let domin of undProjectDomain">
+          <div class="row">
+            <div class="col-4" *ngFor="let assetTable of domin.assetTables">
+              <div
+                class="card border border-hover-primary border-active-primary mb-4 h-80px overflow-hidden cursor-pointer overflow-hidden"
+                routerLinkActive="active"
+              >
+                <div
+                  class="card-body p-4 py-2 d-flex flex-column justify-content-end"
+                >
+                  <div class="text-end icon-position">
+                    <span
+                      [inlineSVG]="
+                        './assets/media/icons//duotune/aside/featureclass.svg'
+                      "
+                      class="svg-icon svg-icon svg-icon-primary svg-icon-2x"
+                    ></span>
+                  </div>
+
+                  <div class="fw-bold fs-2">
+                    {{ assetTable?.assetGroups?.length }}
+                  </div>
+
+                  <div class="fw-semibold" [ngClass]="'fs-7'">
+                    {{ assetTable.name }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<app-connect-to-und
+  (connect)="handleUNDConnect($event)"
+  #connectUNDModal
+></app-connect-to-und>

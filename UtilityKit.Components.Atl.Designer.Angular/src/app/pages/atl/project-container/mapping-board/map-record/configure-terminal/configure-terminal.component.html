@@ -1,0 +1,117 @@
+<div class="card card-bordered h-100">
+  <div
+    class="card-header d-flex justify-content-between align-items-center border-0 h-70px mh-70px"
+  >
+    <!--begin::Page title-->
+    <div class="d-flex">
+      <button
+        type="button"
+        (click)="close()"
+        class="btn btn-flex ps-2 pe-0 btn-sm btn-dark me-4"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr063.svg'"
+          class="svg-icon svg-icon-3"
+        ></span>
+      </button>
+      <!--begin::Title-->
+      <h1
+        class="page-heading flex-column d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0"
+      >
+        Configure Terminal Settings
+        <span class="text-muted fs-7 fw-normal mt-2"
+          >(47-7) ATL_GDB - Insert to - AssetType1
+        </span>
+      </h1>
+      <!--end::Title-->
+    </div>
+    <!--end::Page title-->
+  </div>
+  <div class="card-body py-3" style="height: calc(100% - 140px)">
+    <form [formGroup]="configureTerminalForm">
+      <div *ngIf="!configureTerminalForm.valid">
+        <div class="text-danger">Should select at least one terminal.</div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <label for="" class="form-label">From Terminal Device</label>
+          <select
+            class="form-select form-select-sm mb-4"
+            aria-label="type"
+            formControlName="fromTerminalFieldName"
+            [ngbTooltip]="fromTerminalFieldName?.invalid && (fromTerminalFieldName?.dirty || fromTerminalFieldName?.touched) && fromTerminalFieldName?.errors?.['required'] ? fromTerminalFieldNameRequired : ''"
+            [ngClass]="{'is-invalid': fromTerminalFieldName?.invalid && (fromTerminalFieldName?.dirty || fromTerminalFieldName?.touched) && (fromTerminalFieldName?.errors?.['required'])}"
+            (change)="selectChanged()"
+          >
+            <option [value]="null" selected disabled>
+              Select Terminal Device
+            </option>
+            <option [value]="field.name" *ngFor="let field of fields">
+              {{ field.name }}
+            </option>
+          </select>
+          <ng-template placement="top right" #fromTerminalFieldNameRequired>
+            <span class="text-danger"
+              >From Terminal is required</span
+            ></ng-template
+          >
+        </div>
+        <div class="col-6">
+          <label for="" class="form-label">To Terminal Device</label>
+          <select
+            class="form-select form-select-sm"
+            aria-label="type"
+            formControlName="toTerminalFieldName"
+            [ngbTooltip]="toTerminalFieldName?.invalid && (toTerminalFieldName?.dirty || toTerminalFieldName?.touched) && toTerminalFieldName?.errors?.['required'] ? toTerminalIdRequired : ''"
+            [ngClass]="{'is-invalid': toTerminalFieldName?.invalid && (toTerminalFieldName?.dirty || toTerminalFieldName?.touched) && (toTerminalFieldName?.errors?.['required'])}"
+            (change)="selectChanged()"
+          >
+            <option [value]="null" selected disabled>
+              Select Terminal Device
+            </option>
+            <option [value]="field.name" *ngFor="let field of fields">
+              {{ field.name }}
+            </option>
+          </select>
+          <ng-template placement="top right" #toTerminalIdRequired>
+            <span class="text-danger"
+              >To Terminal is required</span
+            ></ng-template
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+  <div
+    class="card-footer py-5 d-flex justify-content-end align-items-center h-70px mh-70px"
+  >
+    <button
+      type="button"
+      class="btn btn-sm btn-secondary me-2"
+      (click)="delete()"
+      [disabled]="
+        !(
+          this.configureTerminalObject.terminalSettingsJson
+            ?.fromTerminalFieldName !== null ||
+          this.configureTerminalObject.terminalSettingsJson
+            ?.toTerminalFieldName !== null
+        )
+      "
+    >
+      <span>Delete</span>
+
+      <!-- <span [ngClass]="deleting ? 'inprogress' : ''">Delete</span> -->
+    </button>
+    <button type="button" class="btn btn-sm btn-secondary me-2" (click)="close()">
+      Cancel
+    </button>
+    <button
+      type="button"
+      class="btn btn-sm btn-dark"
+      [disabled]="!configureTerminalForm.valid || saving"
+      (click)="save()"
+    >
+      <span [ngClass]="saving ? 'inprogress' : ''">Save Changes</span>
+    </button>
+  </div>
+</div>

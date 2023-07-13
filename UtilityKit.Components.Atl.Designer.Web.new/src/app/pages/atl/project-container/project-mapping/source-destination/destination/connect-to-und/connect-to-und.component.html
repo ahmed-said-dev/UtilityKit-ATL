@@ -1,0 +1,92 @@
+<ng-template let-modal #connectToUnd>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4 class="card-title">Connect to UND Project</h4>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          (click)="close()"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr088.svg'"
+            class="svg-icon svg-icon-muted svg-icon-1"
+          ></span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <div class="card-body py-3">
+      <form>
+        <!--begin::Search-->
+        <div class="d-flex align-items-center position-relative my-4">
+          <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/general/gen021.svg'"
+            class="svg-icon svg-icon-1 position-absolute ms-6"
+          ></span>
+          <!--end::Svg Icon-->
+          <input
+            type="text"
+            data-kt-user-table-filter="search"
+            class="form-control ps-14"
+            placeholder="Search for UND Project ?"
+            (keyup)="handleSearchChange($event)"
+          />
+        </div>
+        <!--end::Search-->
+        <div class="card-scroll h-400px max-h-400px">
+          <div class="col-12" *ngFor="let uNDProject of filteredUNDProjects">
+            <!--begin::Option-->
+            <input
+              type="radio"
+              class="btn-check"
+              name="undProject"
+              id="{{ uNDProject.id }}"
+            />
+            <label
+              class="btn btn-outline btn-outline-gray-500 btn-active-primary p-5 d-flex align-items-center mb-5 overflow-hidden"
+              for="{{ uNDProject.id }}"
+              (click)="handleSelectUND(uNDProject.id)"
+            >
+              <!--begin::Svg Icon | path: icons/duotune/coding/cod001.svg-->
+              <span
+                [inlineSVG]="
+                  './assets/media/icons/duotune/splash/project-creation/und.svg'
+                "
+                class="svg-icon svg-icon-3x me-5"
+              ></span>
+              <span class="flex-column d-flex fw-semibold text-start">
+                <span class="fw-bold d-block fs-4"
+                  >{{ uNDProject.name }}
+                  <!-- <span class="fw-semibold"
+                    >{{ uNDProject.arcGISVersion }}
+                  </span> -->
+                </span>
+                <span class="text-muted fs-8 fw-semibold">
+                  {{ uNDProject.description }}
+                </span>
+              </span>
+            </label>
+            <!--end::Option-->
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer text-end">
+      <button type="button" class="btn btn-sm btn-light me-2" (click)="close()">
+        Cancel
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary btn-sm"
+        (keyup.enter)="handleConnectCLick()"
+        (click)="handleConnectCLick()"
+        [disabled]="!selectedUNDId || saving"
+      >
+        <span [ngClass]="saving ? 'inprogress' : ''">Connect</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

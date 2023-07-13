@@ -1,0 +1,142 @@
+<!--begin::Creation Buttons-->
+<div class="d-flex mb-10">
+  <a
+    (click)="createBlankProject()"
+    class="btn btn-primary btn-sm btn-flex flex-column overflow-hidden w-150px h-150px pt-5 pb-2 d-flex justify-content-center"
+  >
+    <!--begin::Icon-->
+    <span
+      [inlineSVG]="
+        './assets/media/icons/duotune/splash/project-creation/atl-new.svg'
+      "
+      class="svg-icon svg-icon-4tx mb-3"
+    ></span>
+    <!--end::Icon-->
+
+    <!--begin::Title-->
+    <span class="fw-semibold fs-sm"> Create a Blank Project </span>
+    <!--end::Title-->
+  </a>
+
+  <div class="mx-10 custom-separator"></div>
+
+  <a
+    class="btn btn-outline btn-sm btn-active-color-primary border border-hover-primary border-hover-2 btn-flex flex-column overflow-hidden w-150px h-150px pt-5 pb-2 d-flex justify-content-center"
+  >
+    <!--begin::Icon-->
+    <span
+      [inlineSVG]="
+        './assets/media/icons/duotune/splash/project-creation/file.svg'
+      "
+      class="svg-icon svg-icon-primary svg-icon-4tx mb-3"
+    ></span>
+
+    <!--end::Icon-->
+
+    <!--begin::Title-->
+    <span class="fw-semibold"> Create from an Existing File </span>
+    <!--end::Title-->
+  </a>
+</div>
+<!--end::Creation Buttons-->
+
+<div
+  class="d-flex flex-column flex-lg-row justify-content-start justify-content-lg-between align-content-start align-items-start align-items-lg-center mb-4"
+>
+  <!--begin::Table Title-->
+  <h1 class="fw-semibold fs-2 mb-4 mb-lg-0">List of Projects</h1>
+  <!--end::Table Title-->
+  <div>
+    <!--begin::Search-->
+    <div class="d-flex align-items-center position-relative my-0">
+      <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/general/gen021.svg'"
+        class="svg-icon svg-icon-1 position-absolute ms-6"
+      ></span>
+      <!--end::Svg Icon-->
+      <input
+        type="text"
+        data-kt-user-table-filter="search"
+        class="form-control form-control ps-14"
+        placeholder="Search for ATL Project ?"
+        (keyup)="handleSearchChange($event)"
+      />
+    </div>
+    <!--end::Search-->
+  </div>
+</div>
+<div class="card shadow-sm card-rounded">
+  <p-table
+    [breakpoint]="'960px'"
+    [scrollable]="true"
+    scrollHeight="flex"
+    [value]="filteredAtlProjects"
+    [paginator]="true"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [rows]="10"
+    [rowHover]="true"
+  >
+    <ng-template pTemplate="header">
+      <tr class="fontstyle">
+        <th style="min-width: 300px" pFrozenColumn>Project Name</th>
+        <th style="min-width: 40%">Description</th>
+        <th style="min-width: 200px">Created at</th>
+        <th style="min-width: 200px">Last Modified</th>
+        <th style="min-width: 100px" class="text-center">Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-product>
+      <tr class="fontstyle">
+        <!-- <td>{{ product.id }}</td> -->
+        <td
+          pFrozenColumn
+          class="text-capitalize fw-bold"
+          style="min-width: 300px"
+        >
+          <a
+            (click)="handleOpenProjectClick(product.id)"
+            class="text-dark text-hover-primary cursor-pointer"
+            >{{ product.name | truncate : [30, "..."] }}</a
+          >
+        </td>
+        <td class="text-capitalize" style="min-width: 40%">
+          {{ product.description | truncate : [80, "..."] }}
+        </td>
+        <td class="text-capitalize" style="min-width: 200px">
+          Feb. 23, 2023 - 01:25:56 PM
+        </td>
+        <td class="text-capitalize" style="min-width: 200px">
+          March. 02, 2023 - 04:05:34 AM
+        </td>
+        <td class="text-center" style="min-width: 100px">
+          <a
+            class="btn btn-icon btn-sm btn-bg-light btn-active-color-dark me-2"
+            placement="top"
+            ngbTooltip="Edit Project"
+          >
+            <span class="svg-icon svg-icon-2"> <i class="fa fa-pen"></i></span>
+            <!--end::Svg Icon-->
+          </a>
+          <a
+            class="btn btn-icon btn-sm btn-bg-light btn-active-color-danger"
+            placement="top"
+            ngbTooltip="Delete Project"
+          >
+            <span class="svg-icon svg-icon-2">
+              <i class="fa fa-trash"></i>
+            </span>
+            <!--end::Svg Icon-->
+          </a>
+        </td>
+        <!-- <td>{{ product.undProjectId }}</td> -->
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<app-create-blank
+  #createBalnkModal
+  (closeModalEvent)="onCloseBlankATL($event)"
+></app-create-blank>

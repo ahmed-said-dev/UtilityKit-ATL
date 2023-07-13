@@ -1,0 +1,312 @@
+<ng-template let-modal #configureThreeDTemplate>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Configure 3D Settings</h3>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          (click)="this.close()"
+        >
+          <span class="svg-icon svg-icon-muted svg-icon-1"
+            ><svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                opacity="0.5"
+                x="7.05025"
+                y="15.5356"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(-45 7.05025 15.5356)"
+                fill="currentColor"
+              />
+              <rect
+                x="8.46447"
+                y="7.05029"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(45 8.46447 7.05029)"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <div class="card-body card-scroll h-400px max-h-400px">
+      <form [formGroup]="ConfigureThreeDForm">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <!-- Read Z Value From Field -->
+            <div class="border bodrder-1 p-4 rounded mb-4">
+              <div
+                class="form-check form-check-custom form-check-solid mt-1 mb-4"
+              >
+                <div class="me-5 w-100">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="radio3D"
+                    [value]="ZValueSettingTypeEnum.zFieldName"
+                    formControlName="radio3D"
+                    (change)="
+                      handleRadioChange(ZValueSettingTypeEnum.zFieldName)
+                    "
+                  />
+                  <!-- (change)="onChangeRadio($event)" -->
+                  <label class="form-check-label" for="fromField">
+                    Read Z Value From Field
+                  </label>
+                  <select
+                    class="form-select form-select-sm mt-4"
+                    aria-label="field"
+                    formControlName="zFieldName"
+                    [attr.disabled]="
+                      radio3D?.value != ZValueSettingTypeEnum.zFieldName
+                        ? ''
+                        : null
+                    "
+                    [ngbTooltip]="zFieldName?.invalid && (zFieldName?.dirty || zFieldName?.touched) && zFieldName?.errors?.['required'] ? zFieldNameRequired : ''"
+                    [ngClass]="{'is-invalid': zFieldName?.invalid && (zFieldName?.dirty || zFieldName?.touched) && (zFieldName?.errors?.['required'])}"
+                  >
+                    <!-- [ngClass]="{'is-invalid': zFieldName?.invalid && (zFieldName?.dirty || zFieldName?.touched)}" -->
+                    <option [value]="null" selected disabled>
+                      Select Field
+                    </option>
+                    <option
+                      *ngFor="let dataSourceField of dataSourceFields"
+                      [value]="dataSourceField.name"
+                    >
+                      {{ dataSourceField.name }}
+                    </option>
+                  </select>
+                  <ng-template placement="top right" #zFieldNameRequired>
+                    <span class="text-danger"
+                      >Z field name is required!</span
+                    ></ng-template
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- Read Z Value From Field -->
+
+            <!-- Default Value -->
+            <div class="border bodrder-1 p-4 rounded mb-4">
+              <div
+                class="form-check form-check-custom form-check-solid mt-1 mb-4"
+              >
+                <div class="me-5 w-100">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="radio3D"
+                    [value]="ZValueSettingTypeEnum.zDefaultValue"
+                    formControlName="radio3D"
+                    (change)="
+                      handleRadioChange(ZValueSettingTypeEnum.zDefaultValue)
+                    "
+                  />
+                  <label class="form-check-label" for="zDefaultValue">
+                    Default Value
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    id="zDefaultValue"
+                    name="zDefaultValue"
+                    [ngbTooltip]="zDefaultValue?.invalid && (zDefaultValue?.dirty || zDefaultValue?.touched) && zDefaultValue?.errors?.['required'] ? zDefaultValueRequired : ''"
+                    [ngClass]="{'is-invalid': zDefaultValue?.invalid && (zDefaultValue?.dirty || zDefaultValue?.touched) && (zDefaultValue?.errors?.['required'])}"
+                    formControlName="zDefaultValue"
+                    class="form-control form-control-sm mt-4"
+                    placeholder="Value"
+                    oninput="validity.valid||(value='');"
+                    [attr.disabled]="
+                      radio3D?.value != ZValueSettingTypeEnum.zDefaultValue
+                        ? ''
+                        : null
+                    "
+                  />
+                  <ng-template placement="top right" #zDefaultValueRequired>
+                    <span class="text-danger"
+                      >Z default Value is required!</span
+                    ></ng-template
+                  >
+
+                  <br />
+                </div>
+              </div>
+            </div>
+            <!-- Default Value -->
+
+            <!-- Formula -->
+            <div class="border bodrder-1 p-4 rounded mb-4">
+              <div class="form-check form-check-custom form-check-solid mt-1">
+                <div class="me-0 d-block">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="radio3D"
+                    [value]="ZValueSettingTypeEnum.zCondition"
+                    formControlName="radio3D"
+                    (change)="
+                      handleRadioChange(ZValueSettingTypeEnum.zCondition)
+                    "
+                  />
+                  <label class="form-check-label mb-4" for="formula">
+                    Formula
+                  </label>
+                  <div class="bg-gray-100 p-4 rounded">
+                    <div class="row">
+                      <div class="col-6 mb-4">
+                        <label for="" class="form-label">Condition</label>
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="Condition"
+                          formControlName="condition"
+                          [attr.disabled]="
+                            radio3D?.value != ZValueSettingTypeEnum.zCondition
+                              ? ''
+                              : null
+                          "
+                          [ngbTooltip]="condition?.invalid && (condition?.dirty || condition?.touched) && condition?.errors?.['required'] ? conditionRequired : ''"
+                          [ngClass]="{'is-invalid': condition?.invalid && (condition?.dirty || condition?.touched) && (condition?.errors?.['required'])}"
+                        />
+                        <ng-template placement="top right" #conditionRequired>
+                          <span class="text-danger"
+                            >Z condition is required!</span
+                          ></ng-template
+                        >
+                      </div>
+                      <div class="col-4 mb-4">
+                        <label for="" class="form-label">Z Value</label>
+                        <input
+                          type="text"
+                          class="form-control form-control-sm"
+                          placeholder="Value"
+                          formControlName="value"
+                          [attr.disabled]="
+                            radio3D?.value != ZValueSettingTypeEnum.zCondition
+                              ? ''
+                              : null
+                          "
+                          [ngbTooltip]="value?.invalid && (value?.dirty || value?.touched) && value?.errors?.['required'] ? valueRequired : ''"
+                          [ngClass]="{'is-invalid': value?.invalid && (value?.dirty || value?.touched) && (value?.errors?.['required'])}"
+                        />
+                        <!-- {{value?.errors?.['required']}} -->
+                        <ng-template placement="top right" #valueRequired>
+                          <span class="text-danger"
+                            >Z Value is required!</span
+                          ></ng-template
+                        >
+                      </div>
+                      <div class="col-1 mb-4 d-flex align-items-end">
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-secondary"
+                          [attr.disabled]="
+                            radio3D?.value != ZValueSettingTypeEnum.zCondition
+                              ? ''
+                              : null
+                          "
+                          (click)="OnAdd3D()"
+                        >
+                          Add
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                  <table
+                    id="kt_datatable_zero_configuration"
+                    class="table align-middle table-row-dashed fs-6 gy-4 mb-0"
+                  >
+                    <thead>
+                      <tr class="fw-semibold fs-6 text-muted">
+                        <th class="min-w-md-125px">Condition</th>
+                        <th class="min-w-md-125px">Z Value</th>
+                        <th class="text-end">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        *ngFor="let configure of zConditionList; let i = index"
+                        [attr.data-index]="i"
+                      >
+                        <td>{{ configure.condition }}</td>
+                        <td>{{ configure.value }}</td>
+                        <td class="text-end">
+                          <div class="d-flex justify-content-end flex-shrink-0">
+                            <button
+                              placement="top"
+                              ngbTooltip="Delete"
+                              (click)="onRemove3D(configure)"
+                              class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm"
+                            >
+                              <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                              <span class="svg-icon svg-icon-3">
+                                <svg
+                                  width="24"
+                                  height="24"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
+                                    fill="currentColor"
+                                  ></path>
+                                  <path
+                                    opacity="0.5"
+                                    d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z"
+                                    fill="currentColor"
+                                  ></path>
+                                  <path
+                                    opacity="0.5"
+                                    d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
+                                    fill="currentColor"
+                                  ></path>
+                                </svg>
+                              </span>
+                              <!--end::Svg Icon-->
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <!-- Formula -->
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer text-end">
+      <button
+        type="button"
+        class="btn btn-sm btn-light me-2"
+        (click)="this.close()"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-primary"
+        [disabled]="!ConfigureThreeDForm.valid || saving"
+        (click)="save()"
+      >
+        <span [ngClass]="saving ? 'inprogress' : ''">Save</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

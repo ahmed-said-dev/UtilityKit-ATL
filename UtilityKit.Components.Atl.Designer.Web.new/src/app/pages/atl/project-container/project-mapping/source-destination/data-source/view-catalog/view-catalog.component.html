@@ -1,0 +1,127 @@
+<ng-template let-modal #viewCatalogHtml>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Source Name : {{ dataSourceCatalog.name }}</h3>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          (click)="close()"
+        >
+          <span class="svg-icon svg-icon-muted svg-icon-1"
+            ><svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                opacity="0.5"
+                x="7.05025"
+                y="15.5356"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(-45 7.05025 15.5356)"
+                fill="currentColor"
+              />
+              <rect
+                x="8.46447"
+                y="7.05029"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(45 8.46447 7.05029)"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <div class="card-body card-scroll max-h-400px">
+      <div class="row">
+        <div class="col-4">
+          <p-tree
+            [value]="tree"
+            selectionMode="single"
+            (onNodeSelect)="handleNodeSelect($event)"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="33"
+            scrollHeight="300px"
+          ></p-tree>
+        </div>
+        <div class="col-8" *ngIf="isNodeSelected">
+          <!--begin::Toolbar-->
+          <div class="toolbar d-flex flex-stack flex-wrap mb-5 mb-lg-7">
+            <!--begin::Page title-->
+            <div class="page-title d-flex flex-column py-1">
+              <!--begin::Title-->
+              <h1 class="d-flex align-items-start flex-column">
+                <span
+                  class="text-dark fw-bold fs-3 mb-2"
+                  [ngClass]="{ 'badge badge-secondary': isFeautreClass }"
+                  >{{ selectedNode }} Details</span
+                >
+              </h1>
+              <!--end::Title-->
+            </div>
+            <!--end::Page title-->
+          </div>
+          <!--end::Toolbar-->
+          <table class="table align-middle table-row-dashed fs-6 gy-4 mb-0">
+            <thead>
+              <tr class="fw-semibold fs-6 text-muted">
+                <th class="min-w-md-25px">#</th>
+                <th>Field Name</th>
+                <th>Type</th>
+                <th>Is Null</th>
+                <th>Length</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class=""
+                *ngFor="
+                  let selectedNodeField of selectedNodeFields;
+                  let i = index
+                "
+              >
+                <td>{{ i + 1 }}</td>
+                <td>{{ selectedNodeField?.name }}</td>
+                <td>
+                  <div class="badge badge-primary fw-bold">
+                    {{ selectedNodeField?.type }}
+                  </div>
+                </td>
+                <td>
+                  <div
+                    class="badge badge-success fw-bold"
+                    *ngIf="selectedNodeField?.isNullable"
+                  >
+                    Yes
+                  </div>
+                  <div
+                    class="badge badge-danger fw-bold"
+                    *ngIf="!selectedNodeField?.isNullable"
+                  >
+                    No
+                  </div>
+                </td>
+                <td>{{ selectedNodeField?.length }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer text-end">
+      <button type="button" class="btn btn-sm btn-primary" (click)="close()">
+        Close
+      </button>
+    </div>
+  </div>
+</ng-template>
