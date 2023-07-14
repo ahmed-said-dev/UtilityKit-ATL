@@ -1,0 +1,157 @@
+<div class="d-flex justify-content-between flex-column h-100">
+  <div class="h-lg-150px mh-lg-150px">
+    <div class="pt-3 px-6 my-4">
+      <div class="row">
+        <div class="col-sm-6 mb-lg-2">
+          <label for="" class="form-label fs-7">Network</label>
+          <select
+            name="selectedNetworkId"
+            [(ngModel)]="selectedNetworkId"
+            (change)="onChangeNetwork($event)"
+            class="form-select form-select-sm"
+            aria-label="network"
+          >
+            <option value="0" selected disabled>Network</option>
+            <option [value]="network.id" *ngFor="let network of networks">
+              {{ network.name }} Network
+            </option>
+          </select>
+        </div>
+        <div class="col-sm-6 mb-lg-2">
+          <label for="selectedAssetTableId" class="form-label fs-7"
+            >Asset Table</label
+          >
+          <select
+            name="selectedAssetTableId"
+            [(ngModel)]="selectedAssetTableId"
+            (change)="onChangeAssetTable($event)"
+            [disabled]="selectedNetworkId === '0'"
+            class="form-select form-select-sm"
+            aria-label="assetTable"
+          >
+            <option value="0" selected disabled>Asset Table</option>
+            <option
+              [value]="assetTable.id"
+              *ngFor="let assetTable of assetTables"
+            >
+              {{ assetTable.name }}
+            </option>
+          </select>
+        </div>
+        <div class="col-sm-6">
+          <label for="selectedAssetGroupId" class="form-label fs-7"
+            >Asset Group</label
+          >
+          <select
+            name="selectedAssetGroupId"
+            [(ngModel)]="selectedAssetGroupId"
+            (change)="onChangeAssetGroup($event)"
+            [disabled]="selectedAssetTableId === '0'"
+            class="form-select form-select-sm"
+            aria-label="assetGroup"
+          >
+            <option value="0" selected disabled>Asset Group</option>
+            <option
+              [value]="assetGroup.id"
+              *ngFor="let assetGroup of assetGroups"
+            >
+              {{ assetGroup.name }}
+            </option>
+          </select>
+        </div>
+        <div class="col-sm-6">
+          <label for="" class="form-label fs-7">Mapping Status</label>
+          <select
+            class="form-select form-select-sm"
+            (change)="onChangeOnlyMapped($event)"
+          >
+            <option value="0" selected disabled>Status</option>
+            <option value="All">All</option>
+            <option value="Mapped">Mapped</option>
+            <option value="NotMapped">Not Mapped</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="height: calc(100% - 150px)">
+    <div class="d-flex justify-content-between flex-column h-100">
+      <div class="h-100 overflow-auto">
+        <div class="card">
+          <div class="card-body card-scroll pt-3 px-6">
+            <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+              <ngb-panel
+                id="{{ filteredAssetTable.name }}"
+                *ngFor="
+                  let filteredAssetTable of filteredAssetTables;
+                  let highlightedAssetTable = index
+                "
+              >
+                <ng-template ngbPanelTitle>
+                  <span class="fw-bold fs-6">
+                    {{ filteredAssetTable.name }}
+                    <span class="ms-1 fs-7 fw-normal text-muted">
+                      ({{ filteredAssetTable.networkName }})
+                    </span>
+                  </span>
+                </ng-template>
+                <ng-template class="py-0" ngbPanelContent>
+                  <div class="row">
+                    <div
+                      class="col-lg-4"
+                      *ngFor="
+                        let assetGroup of filteredAssetTable.assetGroups;
+                        let highlightedAssetGroup = index
+                      "
+                    >
+                      <div
+                        (click)="
+                          onClickAssetGroup(
+                            assetGroup,
+                            highlightedAssetGroup,
+                            highlightedAssetTable
+                          )
+                        "
+                        class="card border border-hover-primary border-active-primary mb-4 h-80px borcer-active-3 overflow-hidden cursor-pointer"
+                        [class.active]="
+                          highlightedAssetGroup === highlightedAssetGroupRow &&
+                          highlightedAssetTableRow === highlightedAssetTable
+                        "
+                      >
+                        <div
+                          class="card-body p-4 py-2 d-flex flex-column justify-content-end"
+                        >
+                          <div class="text-end icon-position">
+                            <span
+                              [inlineSVG]="filteredAssetTable.icon"
+                              class="svg-icon svg-icon-primary svg-icon-2qx"
+                            ></span>
+                          </div>
+
+                          <div
+                            [ngClass]="
+                              assetGroup.isMapped ? 'd-block' : 'd-none'
+                            "
+                          >
+                            <span
+                              class="badge badge-light-success badge-position"
+                              >Mapped</span
+                            >
+                          </div>
+
+                          <div class="fw-semibold" [ngClass]="'fs-8'">
+                            {{ assetGroup.name | truncate : [20, "..."] }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-panel>
+            </ngb-accordion>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

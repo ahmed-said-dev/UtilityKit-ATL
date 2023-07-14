@@ -1,0 +1,99 @@
+<ng-template let-modal #schemaDataSource>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Connect to Geodatabase File</h3>
+
+      <div class="card-toolbar">
+        <!--begin::Close-->
+
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          (click)="close()"
+        >
+          <span class="svg-icon svg-icon-muted svg-icon-1"
+            ><svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                opacity="0.5"
+                x="7.05025"
+                y="15.5356"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(-45 7.05025 15.5356)"
+                fill="currentColor"
+              />
+
+              <rect
+                x="8.46447"
+                y="7.05029"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(45 8.46447 7.05029)"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+
+          <!--end::Svg Icon-->
+        </div>
+
+        <!--end::Close-->
+      </div>
+    </div>
+
+    <div class="card-body">
+      <form>
+        <div class="row">
+          <div class="col-12">
+            <label for="" class="form-label">Connect to Geodatabase (.gdb)</label>
+
+            <!-- <input type="file" class="btn-check" id="importCodedDomain" /> -->
+            <!-- <input
+              type="file"
+              class="btn-check"
+              id="FileUpload"
+              webkitdirectory
+              mozdirectory
+              msdirectory
+              odirectory
+              directory
+              (change)="selectFolder($event)"
+            /> -->
+            <input
+              type="text"
+              [(ngModel)]="fileUrl"
+              name="fileUpload"
+              class="form-control form-control-sm6"
+              id="FileUpload"
+              minlength="1"
+              maxlength="=100"
+              id="FileUpload"
+            />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer text-end">
+      <button type="button" class="btn btn-sm btn-light me-2" (click)="close()">
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-primary"
+        (click)="handleConnect()"
+        (keyup.enter)="handleConnect()"
+        [disabled]="saving"
+      >
+        <span [ngClass]="saving ? 'inprogress' : ''">Connect</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

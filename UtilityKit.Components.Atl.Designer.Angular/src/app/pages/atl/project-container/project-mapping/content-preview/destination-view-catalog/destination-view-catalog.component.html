@@ -1,0 +1,151 @@
+<div class="card card-bordered h-100 p-4">
+  <div class="d-flex justify-content-start flex-column h-100">
+    
+    <div class="h-30px mh-30px">
+      <!--begin::Page title-->
+      <div
+        class="page-title d-flex justify-content-between align-items-center flex-wrap"
+      >
+        <!--begin::Title-->
+        <h1
+          class="page-heading d-flex align-items-center text-dark fw-bold fs-4 justify-content-center my-0 text-capitalize"
+        >
+          {{ this.destinationViewCatalog.name }}'s Specification Model
+        </h1>
+        <!--end::Title-->
+      </div>
+      <!--end::Page title-->
+    </div>
+    <div style="height: calc(100% - 50px)">
+      <div class="d-flex justify-content-between flex-column h-100">
+        <div class="h-100 overflow-auto pe-3">
+          <ul
+            class="nav nav-tabs nav-line-tabs nav-line-tabs-2x mb-5 fw-semibold"
+          >
+            <li
+              class="nav-item cursor-pointer"
+              (click)="changeTab(tabs.ASSETS_TAB)"
+            >
+              <a
+                class="nav-link text-active-primary fs-8 text-capitalize"
+                data-bs-toggle="tab"
+                [attr.aria-selected]="activeTabId === tabs.ASSETS_TAB"
+                [class.active]="activeTabId === tabs.ASSETS_TAB"
+                >Assets Classification</a
+              >
+            </li>
+            <li
+              class="nav-item cursor-pointer"
+              (click)="changeTab(tabs.FIELDS_TAB)"
+            >
+              <a
+                class="nav-link text-active-primary fs-8 text-capitalize"
+                data-bs-toggle="tab"
+                [attr.aria-selected]="activeTabId === tabs.FIELDS_TAB"
+                [class.active]="activeTabId === tabs.FIELDS_TAB"
+                >Fields</a
+              >
+            </li>
+          </ul>
+
+          <div class="tab-content" id="myTabContent">
+            <ng-container *ngIf="activeTabId === tabs.ASSETS_TAB">
+              <div>
+                <div
+                  class="mb-4 "
+                  *ngFor="let assetGroup of destinationViewCatalog.assetGroups"
+                ></div>
+                <ngb-accordion #acc="ngbAccordion" activeIds="config-panel-one">
+                  <ngb-panel
+                    id="{{ assetGroup.name }}"
+                   
+                    *ngFor="
+                      let assetGroup of destinationViewCatalog.assetGroups;
+                      let highlightedAssetTable = index
+                    "
+                  >
+                    <ng-template ngbPanelTitle>
+                      <span class="fw-bold">
+                        <p
+                          class="m-0 d-flex justify-content-between align-items-center"
+                        >
+                          <span class="fs-2 text-primary me-2">
+                            {{ assetGroup.code }} <span class="me-2">|</span>
+                          </span>
+                          <span>{{ assetGroup.name }}</span>
+                          <span class="ms-2">
+                            ({{ assetGroup.assetTypes.length }})
+                          </span>
+                        </p></span
+                      >
+                    </ng-template>
+                    <ng-template class="py-0" ngbPanelContent>
+                      <div class="table-responsive">
+                        <table
+                          class="table align-middle table-row-dashed mb-0 table-hover gx-7"
+                        >
+                          <thead>
+                            <tr class="fw-bold text-dark">
+                              <th class="min-w-md-25px">Code</th>
+                              <th class="w-25">Name</th>
+                              <th class="min-w-md-125px">Role Type</th>
+                              <th class="min-w-md-125px">Network Category</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let assetType of assetGroup.assetTypes">
+                              <td>{{assetType.code}}</td>
+                              <td>{{assetType.name}}</td>
+                              <td>--</td>
+                              <td>--</td>
+
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </ng-template>
+                  </ngb-panel>
+                </ngb-accordion>
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="activeTabId === tabs.FIELDS_TAB">
+              <div class="card">
+                <div class="card-body py-4 px-0">
+                  <div class="table-responsive">
+                    <table
+                      class="table align-middle table-row-dashed mb-0 table-hover gx-7"
+                    >
+                      <thead>
+                        <tr class="fw-bold text-dark">
+                          <th class="min-w-md-125px">Name</th>
+                          <th class="min-w-md-125px">Alias</th>
+                          <th class="min-w-md-125px">Length</th>
+                          <th class="min-w-md-125px">Allow Null</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let item of destinationViewCatalog.fields">
+                          <td>{{ item.name }}</td>
+                          <td>{{ item.aliasName }}</td>
+                          <td>
+                            {{ item.length }}
+                          </td>
+                          <td>
+                            <div class="badge badge-success fw-bold">
+                              {{ item.isNull }}
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<div class="card h-100 p-4">
+  <div class="d-flex justify-content-between flex-column h-100">
+    <div class="h-50px mh-50px">
+      <!--begin::Page title-->
+      <div
+        class="page-title d-flex justify-content-between align-items-center flex-wrap"
+      >
+        <!--begin::Title-->
+        <h1
+          class="page-heading d-flex text-dark fw-bold fs-3 align-items-center justify-content-center my-0"
+        >
+          Preview Data Source
+          <span class="ms-3 fs-7 text-muted"
+            >({{ dataSourceCatalog.name }})</span
+          >
+        </h1>
+        <!--end::Title-->
+      </div>
+      <!--end::Page title-->
+    </div>
+    <div style="height: calc(100% - 50px)">
+      <div class="d-flex justify-content-between flex-column h-100">
+        <div class="h-100 overflow-auto pe-3">
+          <div class="row">
+            <div class="col-4">
+              <p-tree
+                [value]="tree"
+                (onNodeSelect)="handleNodeSelect($event)"
+                selectionMode="single"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="22"
+                scrollHeight="580px"
+
+              ></p-tree>
+
+              <!-- {{ tree | json }} -->
+              <!-- <p *ngFor="let item of dataSourceCatalog.tables">{{ item.name }}</p> -->
+            </div>
+            <div class="col-8" *ngIf="isNodeSelected">
+              <!--begin::Title-->
+              <h3
+                class="page-heading d-flex text-dark fw-bold align-items-center"
+              >
+                <span
+                  class="text-dark fw-bold fs-5 mb-2"
+                  [ngClass]="{ '': isFeautreClass }"
+                  >{{ selectedNode }} Details</span
+                >
+              </h3>
+              <!--end::Title-->
+              <!-- table -->
+              <p-table
+                [value]="selectedNodeFields!"
+                [paginator]="true"
+                [rows]="10"
+                [rowHover]="true"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th class="min-w-md-25px">#</th>
+                    <th>Field Name</th>
+                    <th>Type</th>
+                    <th>Is Null</th>
+                    <th>Length</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-field let-rowIndex="rowIndex">
+                  <tr>
+                    <td>{{ rowIndex + 1 }}</td>
+
+                    <td>{{ field.name }}</td>
+                    <td>
+                      <span class="badge badge-primary fw-bold">
+                        {{ field.type }}
+                      </span>
+                    </td>
+                    <td>
+                      <span
+                        class="badge badge-success fw-bold"
+                        *ngIf="field?.isNullable"
+                      >
+                        Yes
+                      </span>
+                      <span
+                        class="badge badge-danger fw-bold"
+                        *ngIf="!field?.isNullable"
+                      >
+                        No
+                      </span>
+                    </td>
+                    <td>{{ field.length }}</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <!-- table -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

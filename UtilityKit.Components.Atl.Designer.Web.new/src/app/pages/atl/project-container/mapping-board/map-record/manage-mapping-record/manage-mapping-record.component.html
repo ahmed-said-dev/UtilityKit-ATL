@@ -1,0 +1,321 @@
+<ng-template
+  let-modal
+  #manageMappingRecordTemplate
+  let-c="close"
+  let-d="dismiss"
+>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Add/Edit Mapping Record</h3>
+      <div class="card-toolbar">
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          (click)="close()"
+        >
+          <span class="svg-icon svg-icon-muted svg-icon-1"
+            ><svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                opacity="0.5"
+                x="7.05025"
+                y="15.5356"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(-45 7.05025 15.5356)"
+                fill="currentColor"
+              />
+              <rect
+                x="8.46447"
+                y="7.05029"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(45 8.46447 7.05029)"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <!--end::Svg Icon-->
+        </div>
+      </div>
+    </div>
+    <div class="card-body card-scroll h-500px max-h-500px">
+      <form [formGroup]="mapRecordForm">
+        <div class="col-12 mb-4">
+          <ng-template #mapModeRequired>
+            <span class="text-danger"> Map mode is required!</span></ng-template
+          >
+          <label for="mapMode" class="form-label required"
+            >Select Map Mode</label
+          >
+          <!-- mapMode?.invalid<h1>{{mapMode?.invalid }}</h1>
+          mapMode?.dirty   <h1>{{mapMode?.dirty }}</h1>
+          mapMode?.touched <h1>{{ mapMode?.touched}}</h1>
+          mapMode?.dirty<h1>{{mapMode?.dirty }}</h1>
+          mapMode?.errors?.['required'] <h1>{{ mapMode?.errors?.['required']}}</h1> -->
+
+          <select
+            class="form-select form-select-sm"
+            aria-label="type"
+            formControlName="mapMode"
+            name="mapMode"
+            id="mapMode"
+            [ngbTooltip]="mapMode?.invalid && (mapMode?.dirty || mapMode?.touched) && mapMode?.errors?.['required'] ? mapModeRequired : ''"
+            [ngClass]="{'is-invalid': mapMode?.invalid && (mapMode?.dirty || mapMode?.touched) && mapMode?.errors?.['required']}"
+          >
+            <option [value]="null" selected disabled>Select Map Mode</option>
+            <option [value]="MapMode.insert">Insert</option>
+            <option [value]="MapMode.update">Update</option>
+          </select>
+        </div>
+        <div class="row d-flex justify-items-center">
+          <div
+            class="d-flex justify-items-center align-content-center align-items-center"
+          >
+            <div class="col mb-2">
+              <!--begin::Card-->
+              <div class="card card-bordered">
+                <div
+                  class="card-header border-0 py-0 justify-content-end ribbon ribbon-start ribbon-clip"
+                >
+                  <div class="ribbon-label">
+                    From Data Source
+                    <span class="ribbon-inner bg-primary"></span>
+                  </div>
+                </div>
+                <div class="card-body py-0">
+                  <div class="row">
+                    <div class="col-12 mb-4">
+                      <ng-template placement="top right" #dataSourceIdRequired>
+                        <span class="text-danger">
+                          Data source is required!</span
+                        ></ng-template
+                      >
+                      <label for="dataSourceId" class="form-label required"
+                        >Data Source</label
+                      >
+                      <select
+                        class="form-select form-select-sm"
+                        id="dataSourceId"
+                        formControlName="dataSourceId"
+                        name="dataSourceId"
+                        [ngbTooltip]="dataSourceId?.invalid && (dataSourceId?.dirty || dataSourceId?.touched) && dataSourceId?.errors?.['required'] ? dataSourceIdRequired : ''"
+                        [ngClass]="{'is-invalid': dataSourceId?.invalid && (dataSourceId?.dirty || dataSourceId?.touched) &&dataSourceId?.errors?.['required']}"
+                        (change)="onChangeDataSource($event)"
+                      >
+                        <option [value]="null" disabled selected>
+                          Select Data Source
+                        </option>
+                        <!--TODO: here i will list all data source on the ATL project -->
+                        <option
+                          *ngFor="let schema of addSchemaToATLResponce"
+                          [value]="schema.dataSource.id"
+                        >
+                          {{ schema.dataSource.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-12 mb-4">
+                      <ng-template
+                        placement="top right"
+                        #dataSourceEntityTypeRequired
+                      >
+                        <span class="text-danger">
+                          Data source type is required!</span
+                        ></ng-template
+                      >
+                      <label for="" class="form-label required"
+                        >Table / Feature Class</label
+                      >
+                      <select
+                        class="form-select form-select-sm"
+                        id="dataSourceEntityType"
+                        formControlName="dataSourceEntityType"
+                        name="dataSourceEntityType"
+                        (change)="onChangeDataSourceEntityType($event)"
+                        [ngbTooltip]="dataSourceEntityType?.invalid && (dataSourceEntityType?.dirty || dataSourceEntityType?.touched) && dataSourceEntityType?.errors?.['required'] ? dataSourceEntityTypeRequired : ''"
+                        [ngClass]="{'is-invalid': dataSourceEntityType?.invalid && (dataSourceEntityType?.dirty || dataSourceEntityType?.touched) &&dataSourceEntityType?.errors?.['required']}"
+                      >
+                        <option [value]="null" selected disabled>
+                          Select Table / Feature Class
+                        </option>
+                        <option [value]="DataSourceEntityType.table">
+                          Table
+                        </option>
+                        <option [value]="DataSourceEntityType.featureClass">
+                          Feature Class
+                        </option>
+                      </select>
+                    </div>
+                    <!-- Tables Start DDL -->
+
+                    <div class="col-12 mb-4" *ngIf="displayTables">
+                      <ng-template
+                        placement="top right"
+                        #dataSourceEntityTypeRequired
+                      >
+                        <span class="text-danger">
+                          Table is required!</span
+                        ></ng-template
+                      >
+                      <label
+                        for="dataSourceEntityName"
+                        class="form-label required"
+                        >Tables</label
+                      >
+                      <select
+                        class="form-select form-select-sm"
+                        name="dataSourceEntityName"
+                        id="dataSourceEntityName"
+                        formControlName="dataSourceEntityName"
+                        [ngbTooltip]="dataSourceEntityName?.invalid && (dataSourceEntityName?.dirty || dataSourceEntityName?.touched) && dataSourceEntityName?.errors?.['required'] ? dataSourceEntityTypeRequired : ''"
+                        [ngClass]="{'is-invalid': dataSourceEntityName?.invalid && (dataSourceEntityName?.dirty || dataSourceEntityName?.touched) &&dataSourceEntityName?.errors?.['required']}"
+                      >
+                        <option [value]="null" selected disabled>
+                          Select Table
+                        </option>
+                        <!--TODO: here i will list all Table OR Feature Class Acording to above flage data source on the ATL project -->
+                        <option
+                          [value]="table.name"
+                          *ngFor="let table of tables"
+                        >
+                          {{ table.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <!-- Tables End DDL -->
+
+                    <!-- Feature Classes Start DDL -->
+                    <div class="col-12 mb-4" *ngIf="!displayTables">
+                      <ng-template
+                        placement="top right"
+                        #dataSourceEntityNameRequired
+                      >
+                        <span placement="top right" class="text-danger">
+                          Feature class is required!</span
+                        ></ng-template
+                      >
+                      <label
+                        for="dataSourceEntityName"
+                        class="form-label required"
+                        >Feature Classes</label
+                      >
+                      <select
+                        class="form-select form-select-sm"
+                        name="dataSourceEntityName"
+                        id="dataSourceEntityName"
+                        formControlName="dataSourceEntityName"
+                        [ngbTooltip]="dataSourceEntityName?.invalid && (dataSourceEntityName?.dirty || dataSourceEntityName?.touched) && dataSourceEntityName?.errors?.['required'] ? dataSourceEntityNameRequired : ''"
+                        [ngClass]="{'is-invalid': dataSourceEntityName?.invalid && (dataSourceEntityName?.dirty || dataSourceEntityName?.touched) &&dataSourceEntityName?.errors?.['required']}"
+                      >
+                        <option [value]="null" selected disabled>
+                          Select Feature Class
+                        </option>
+                        <!--TODO: here i will list all Table OR Feature Class Aؤcording to above flage data source on the ATL project -->
+                        <option
+                          [value]="featureClass.name"
+                          *ngFor="let featureClass of featureClasses"
+                        >
+                          {{ featureClass.name }}
+                        </option>
+                      </select>
+                    </div>
+                    <!-- Feature Classes End DDL -->
+
+                    <div class="col-12 mb-4">
+                      <label for="whereClause" class="form-label"
+                        >Where Clause</label
+                      >
+                      <textarea
+                        rows="4"
+                        class="form-control form-control-sm"
+                        placeholder="Where Clause"
+                        id="whereClause"
+                        name="whereClause"
+                        formControlName="whereClause"
+                      >
+                      </textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <span
+              [inlineSVG]="'./assets/media/icons/duotune/arrows/arr024.svg'"
+              class="svg-icon svg-icon-success svg-icon-3x mx-3"
+            ></span>
+
+            <div class="col mb-2">
+              <div class="card card-bordered">
+                <div
+                  class="card-header border-0 py-0 justify-content-end ribbon ribbon-start ribbon-clip"
+                >
+                  <div class="ribbon-label">
+                    To Destination
+                    <span class="ribbon-inner bg-info"></span>
+                  </div>
+                </div>
+                <div class="card-body py-0">
+                  <div class="row">
+                    <div class="col-12 mb-4">
+                      <ng-template placement="top right" #assetTypeIdRequired>
+                        <span class="text-danger">
+                          Asset type is required!</span
+                        ></ng-template
+                      >
+                      <label for="assetTypeId" class="form-label required"
+                        >Asset Type</label
+                      >
+                      <select
+                        class="form-select form-select-sm"
+                        name="assetTypeId"
+                        id="assetTypeId"
+                        formControlName="assetTypeId"
+                        [ngbTooltip]="assetTypeId?.invalid && (assetTypeId?.dirty || assetTypeId?.touched) && assetTypeId?.errors?.['required'] ? assetTypeIdRequired : ''"
+                        [ngClass]="{'is-invalid': assetTypeId?.invalid && (assetTypeId?.dirty || assetTypeId?.touched) &&assetTypeId?.errors?.['required']}"
+                      >
+                        <option [value]="null" disabled>
+                          Select Asset Type
+                        </option>
+                        <!-- TODO: here i will list all assetTypeId come from UND project -->
+                        <option
+                          *ngFor="
+                            let assetType of assetGroupMappingData.assetTypes
+                          "
+                          [value]="assetType.id"
+                        >
+                          {{ assetType.name }}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer text-end">
+      <button type="button" class="btn btn-sm btn-light me-2" (click)="close()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-primary"
+        [disabled]="!mapRecordForm.valid || saving"
+        (keyup.enter)="save()"
+        (click)="save()"
+      >
+        <span [ngClass]="saving ? 'inprogress' : ''">Save</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

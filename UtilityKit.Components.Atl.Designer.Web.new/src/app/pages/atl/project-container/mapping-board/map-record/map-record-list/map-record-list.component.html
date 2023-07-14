@@ -1,0 +1,327 @@
+<div
+  class="d-flex justify-content-center align-items-center h-100"
+  *ngIf="mapRecords.length === 0"
+>
+  <div class="w-lg-50 text-center">
+    <img
+      src="./assets/media/backgrounds/add-file.gif"
+      class="w-50"
+      alt="add-file"
+    />
+    <h1 class="text-primary fw-semibold fs-2qx my-5">
+      No Mapping Records Found
+    </h1>
+    <p class="text-center fw-medium lh-lg text-gray-400 my-lg-3">
+      The mapping record is the migration logic from the data source to the
+      destination utility network model. it contains all utility
+      network-supported functions like containment, assembly, structure
+      attachment, 3D, etc.
+    </p>
+    <button
+      class="btn btn-primary btn-lg w-lg-300px mt-lg-7"
+      (click)="openManageMappingRecord()"
+    >
+      Add New Map Record
+    </button>
+  </div>
+</div>
+
+<div
+  class="d-flex justify-content-between flex-column h-100"
+  *ngIf="mapRecords.length > 0"
+>
+  <div class="h-70px mh-70px">
+    <!--begin::Page title-->
+    <div
+      class="page-title d-flex justify-content-between align-items-center flex-wrap"
+    >
+      <!--begin::Title-->
+      <h1
+        class="page-heading flex-column d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0"
+      >
+        {{ assetGroupMappingData.assetGroupName }} Mapping Records
+        <span class="text-muted fs-7 fw-normal mt-2"
+          >{{ assetGroupMappingData.assetTableName }}
+        </span>
+      </h1>
+      <!--end::Title-->
+
+      <!--begin::Primary button-->
+      <a
+        class="btn btn-sm fw-bold btn-primary"
+        (click)="openManageMappingRecord()"
+      >
+        <i class="fa fa-plus me-2"></i>
+        Add Mapping Record</a
+      >
+      <!--end::Primary button-->
+    </div>
+    <!--end::Page title-->
+  </div>
+
+  <div class="bg-body" style="height: calc(100% - 70px)">
+    <div class="d-flex justify-content-between flex-column h-100">
+      <div class="h-100 overflow-auto">
+        <div
+          class="card card-bordered p-7 mb-4 me-3"
+          *ngFor="let mapRecord of mapRecords"
+        >
+          <div
+            class="d-flex justify-content-between align-items-center flex-sm-nowrap"
+          >
+            <div class="me-5 fs-2tx text-muted w-100px">
+              {{ mapRecord.percentage }}%
+            </div>
+            <div class="w-50">
+              <!--begin::Title-->
+              <h4 class="mb-1 text-dark">
+                {{ mapRecord.dataSource?.name }}
+                <span
+                  class="badge badge-light-success"
+                  *ngIf="mapRecord.isActive"
+                  >Active</span
+                >
+              </h4>
+              <!--end::Title-->
+              <!--begin::Content-->
+              <div class="text-muted fw-semibold">
+                {{ mapRecord.sourceDataJson.dataSourceEntityName }}
+              </div>
+              <span class="text-muted fw-semibold">{{
+                mapRecord.sourceDataJson.whereClause
+              }}</span>
+              <!--end::Content-->
+            </div>
+            <div
+              class="d-flex align-items-center text-primary fw-semibold w-200px"
+            >
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/arrows/arr010.svg'"
+                class="svg-icon svg-icon-primary svg-icon-2hx"
+              ></span>
+
+              {{
+                mapRecord.mapMode === MapModeEnum.insert
+                  ? "Insert to"
+                  : "Update"
+              }}
+
+              <span
+                [inlineSVG]="'./assets/media/icons/duotune/arrows/arr064.svg'"
+                class="svg-icon svg-icon-primary svg-icon-2hx"
+              ></span>
+            </div>
+            <div
+              class="d-flex justify-content-between align-content-center align-items-center flex-grow-1 w-50"
+            >
+              <!--begin::Content-->
+
+              <h4 class="text-dark">
+                {{ mapRecord.destinationNetworkJson.assetTypeName }}
+              </h4>
+
+              <!--begin::Actions-->
+              <div class="d-flex">
+                <ng-container
+                  *ngFor="
+                    let completenessCriteria of mapRecord.completenessCriteriaJson
+                  "
+                >
+                  <a
+                    class="btn btn-icon btn-warning btn-sm me-3"
+                    placement="top"
+                    ngbTooltip="{{ completenessCriteria.comment }}"
+                    ><i class="fa-solid text-dark fa-info"></i> </a
+                ></ng-container>
+                <a
+                  (click)="openManageMappingRecord(mapRecord.id)"
+                  placement="left"
+                  ngbTooltip="Edit"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"
+                >
+                  <i class="fa-solid fa-pen"></i>
+
+                  <!--end::Svg Icon-->
+                </a>
+                <a
+                  placement="left"
+                  ngbTooltip="Clone"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"
+                  (click)="clone(mapRecord.id)"
+                >
+                  <span
+                    [inlineSVG]="
+                      './assets/media/icons/duotune/general/gen054.svg'
+                    "
+                    class="svg-icon svg-icon-3"
+                  ></span>
+
+                  <!--end::Svg Icon-->
+                </a>
+                <a
+                  class="btn btn-icon btn-bg-light btn-color-success btn-sm me-3"
+                  placement="left"
+                  ngbTooltip="Deactivate"
+                  *ngIf="!mapRecord.isActive"
+                  (click)="Activation(false, mapRecord.id)"
+                  ><i class="fa-solid fa-toggle-on fs-3"></i>
+                </a>
+                <a
+                  placement="left"
+                  ngbTooltip="Activate"
+                  class="btn btn-icon btn-bg-light btn-sm me-3"
+                  *ngIf="mapRecord.isActive"
+                  (click)="Activation(true, mapRecord.id)"
+                  ><i class="fa-solid fa-toggle-off fs-3"></i>
+                </a>
+                <a
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+                  data-kt-menu-trigger="click"
+                  data-kt-menu-placement="bottom-end"
+                  placement="left"
+                  ngbTooltip="Quick Actions"
+                >
+                  <i class="fa-solid fa-ellipsis-vertical fs-3"></i>
+                </a>
+                <div
+                  class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light fw-semibold w-200px py-4"
+                  data-kt-menu="true"
+                >
+                  <div class="menu-item px-4">
+                    <a
+                      class="menu-link px-4 btn btn-sm btn-active-light text-hover-primary"
+                      (click)="openFieldMapping(mapRecord)"
+                    >
+                      <span
+                        [inlineSVG]="
+                          './assets/media/icons/duotune/general/gen054.svg'
+                        "
+                        class="svg-icon svg-icon-3"
+                      ></span>
+                      Fields</a
+                    >
+                  </div>
+                  <div class="menu-item px-4" *ngIf="displayTerminal">
+                    <a
+                      class="menu-link px-4 btn btn-sm btn-active-light text-hover-primary"
+                      (click)="openConfigureTerminal(mapRecord)"
+                    >
+                      <span
+                        [inlineSVG]="
+                          './assets/media/icons/duotune/esri/automation.svg'
+                        "
+                        class="svg-icon svg-icon-3"
+                      ></span>
+                      Terminal</a
+                    >
+                  </div>
+                  <div class="menu-item px-4" *ngIf="display3D">
+                    <a
+                      class="menu-link px-4 btn btn-sm btn-active-light text-hover-primary"
+                      (click)="openConfigure3D(mapRecord)"
+                    >
+                      <span
+                        [inlineSVG]="
+                          './assets/media/icons/duotune/general/gen054.svg'
+                        "
+                        class="svg-icon svg-icon-3"
+                      ></span>
+                      3D</a
+                    >
+                  </div>
+                  <div class="menu-item px-4" *ngIf="displayAssembly">
+                    <a
+                      class="menu-link px-4 btn btn-sm btn-active-light text-hover-primary"
+                      (click)="openConfigureAssembly(mapRecord)"
+                    >
+                      <span
+                        [inlineSVG]="
+                          './assets/media/icons/duotune/general/gen054.svg'
+                        "
+                        class="svg-icon svg-icon-3"
+                      ></span>
+                      Assembly</a
+                    >
+                  </div>
+                  <div class="menu-item px-4" *ngIf="displayContainment">
+                    <a
+                      class="menu-link px-4 btn btn-sm btn-active-light text-hover-primary"
+                      (click)="openConfigureContainment(mapRecord)"
+                    >
+                      <span
+                        [inlineSVG]="
+                          './assets/media/icons/duotune/general/gen054.svg'
+                        "
+                        class="svg-icon svg-icon-3"
+                      ></span>
+                      Containment</a
+                    >
+                  </div>
+                  <div class="menu-item px-4" *ngIf="displayAttachment">
+                    <a
+                      class="menu-link px-4 btn btn-sm btn-active-light text-hover-primary"
+                      (click)="openConfigureStructre(mapRecord)"
+                    >
+                      <span
+                        [inlineSVG]="
+                          './assets/media/icons/duotune/general/gen054.svg'
+                        "
+                        class="svg-icon svg-icon-3"
+                      ></span>
+                      Structure</a
+                    >
+                  </div>
+                  <div class="menu-item px-4">
+                    <a
+                      class="menu-link px-4 btn btn-sm btn-active-light text-hover-primary"
+                      (click)="delete(mapRecord.id)"
+                    >
+                      <span class="svg-icon svg-icon-3">
+                        <i class="fa-solid fa-trash"></i>
+                      </span>
+                      Delete</a
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!--end::Actions-->
+              <!--end::Content-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <app-manage-mapping-record
+  [assetGroupMappingData]="assetGroupMappingData"
+  (assetGroupId)="getAssetGroupId()"
+  #manageMappingRecordComponent
+></app-manage-mapping-record>
+<!--<app-configure-three-d
+#configureThreeDComponent
+(onCompletenessChanged)="handleonCompletenessChanged()"
+></app-configure-three-d>-->
+<app-configure-terminal
+  #configureTerminalComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-configure-terminal>
+<app-field-mapping
+  #fieldMappingComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-field-mapping>
+<app-configure-containment
+  #configureContainmentComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-configure-containment>
+<app-configure-structure
+  #configureStructureComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-configure-structure>
+<app-configure-assembly
+  #configureAssemblyComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-configure-assembly>

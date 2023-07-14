@@ -1,0 +1,185 @@
+<ng-template let-modal #replacementFilterTemplate>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Replacement Filter</h3>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          (click)="close()"
+        >
+          <span class="svg-icon svg-icon-muted svg-icon-1"
+            ><svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                opacity="0.5"
+                x="7.05025"
+                y="15.5356"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(-45 7.05025 15.5356)"
+                fill="currentColor"
+              />
+              <rect
+                x="8.46447"
+                y="7.05029"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(45 8.46447 7.05029)"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <div class="card-body card-scroll h-400px max-h-400px">
+      <form [formGroup]="replacementFilterForm">
+        <div class="row">
+          <div class="col-6 mb-4">
+            <label for="" class="form-label">Field Name</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              value="{{ destinationFieldName }}"
+              readonly
+              disabled
+            />
+          </div>
+          <div class="bg-gray-100 p-4 rounded mb-4">
+            <div class="row">
+              <div class="col-5 mb-4">
+                <label for="" class="form-label">Replace</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  placeholder="Replace"
+                  formControlName="replace"
+                  [ngbTooltip]="replace?.invalid && (replace?.dirty || replace?.touched) && replace?.errors?.['required'] ? replaceRequired : ''"
+                  [ngClass]="{'is-invalid': replace?.invalid && (replace?.dirty || replace?.touched) && (replace?.errors?.['required'])}"
+                />
+                <ng-template placement="top right" #replaceRequired>
+                  <span class="text-danger"
+                    >replace is required!</span
+                  ></ng-template
+                >
+              </div>
+              <div class="col-5 mb-4">
+                <label for="" class="form-label">With</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  placeholder="With"
+                  formControlName="with"
+                  [ngbTooltip]="with?.invalid && (with?.dirty || with?.touched) && with?.errors?.['required'] ? withRequired : ''"
+                  [ngClass]="{'is-invalid': with?.invalid && (with?.dirty || with?.touched) && (with?.errors?.['required'])}"
+                />
+                <ng-template placement="top right" #withRequired>
+                  <span class="text-danger"
+                    >with is required!</span
+                  ></ng-template
+                >
+              </div>
+              <div class="col-1 mb-4 d-flex align-items-end">
+                <button
+                  type="button"
+                  class="btn btn-sm btn-secondary"
+                  (click)="OnAdd()"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <!--begin::Card-->
+            <div class="card card-bordered mb-4">
+              <div class="card-body py-0">
+                <table
+                  id="kt_datatable_zero_configuration"
+                  class="table align-middle table-row-dashed fs-6 gy-4 mb-0"
+                >
+                  <thead>
+                    <tr class="fw-semibold fs-6 text-muted">
+                      <th class="min-w-md-125px">Replace</th>
+                      <th class="min-w-md-125px">With</th>
+                      <th class="text-end">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let replacementFilter of replacementFilterList">
+                      <td>{{ replacementFilter.replace }}</td>
+                      <td>{{ replacementFilter.with }}</td>
+
+                      <td class="text-end">
+                        <div class="d-flex justify-content-end flex-shrink-0">
+                          <button
+                            placement="top"
+                            ngbTooltip="Delete"
+                            (click)="onRemove(replacementFilter)"
+                            class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm"
+                          >
+                            <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
+                            <span class="svg-icon svg-icon-3">
+                              <svg
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
+                                  fill="currentColor"
+                                ></path>
+                                <path
+                                  opacity="0.5"
+                                  d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z"
+                                  fill="currentColor"
+                                ></path>
+                                <path
+                                  opacity="0.5"
+                                  d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
+                                  fill="currentColor"
+                                ></path>
+                              </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer text-end">
+      <button
+        type="button"
+        class="btn btn-sm btn-light me-2"
+        (click)="close()"
+      >
+        Cancel
+      </button>
+      <button type="button" class="btn btn-sm btn-primary"   [disabled]="!replacementFilterForm.valid || saving"
+      (click)="save()">
+        <span [ngClass]="saving ? 'inprogress' : ''">Save</span>
+        <!-- <span class="inprogress">Save</span> -->
+      </button>
+    </div>
+  </div>
+</ng-template>

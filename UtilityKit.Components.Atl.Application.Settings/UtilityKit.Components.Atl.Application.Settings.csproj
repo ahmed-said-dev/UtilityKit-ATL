@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="G2Kit.Components.Identity.Core">
+      <HintPath>..\lib\G2Kit.Components.Identity.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

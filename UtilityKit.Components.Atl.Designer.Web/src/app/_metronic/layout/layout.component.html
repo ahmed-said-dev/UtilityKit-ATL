@@ -1,0 +1,87 @@
+<!--begin::Root-->
+<div class="d-flex flex-column flex-root">
+  <!--begin::Page-->
+  <div class="page d-flex flex-column flex-column-fluid">
+    <app-header
+      id="kt_header"
+      class="header align-items-stretch"
+      [ngClass]="headerCSSClasses"
+      #ktHeader
+    >
+    </app-header>
+    <!--begin::Container-->
+    <div
+      id="kt_content_container"
+      class="d-flex flex-column-fluid align-items-stretch"
+      [ngClass]="contentContainerClasses"
+    >
+      <!--begin::Wrapper-->
+      <div
+        class="wrapper d-flex flex-column flex-row-fluid mt-5"
+        id="kt_wrapper"
+      >
+        <!--begin::Content-->
+        <div
+          id="kt_content"
+          class="content flex-column-fluid border-0 ps-0 "
+        >
+          <!-- <ng-container *ngIf="title$ | async">
+            <ng-container *ngIf="toolbarDisplay">
+              <app-toolbar></app-toolbar>
+            </ng-container>
+          </ng-container> -->
+
+            <app-content
+              id="kt_content_container"
+              [ngClass]="contentContainerClasses"
+            ></app-content>
+        </div>
+        <!--end::Content -->
+        <app-footer
+          class="footer py-4 d-flex flex-lg-column"
+          [ngClass]="footerCSSClasses"
+          id="kt_footer"
+        ></app-footer>
+      </div>
+      <!--end::Wrapper-->
+      <ng-container *ngIf="showSidebar$ | async">
+        <app-sidebar
+          class="sidebar p-5 px-lg-0 py-lg-11"
+          data-kt-drawer="true"
+          data-kt-drawer-name="sidebar"
+          data-kt-drawer-activate="{default: true, lg: false}"
+          data-kt-drawer-overlay="true"
+          data-kt-drawer-width="275px"
+          data-kt-drawer-direction="end"
+          data-kt-drawer-toggle="#kt_sidebar_toggle"
+        >
+        </app-sidebar>
+      </ng-container>
+    </div>
+    <!--end::Container-->
+  </div>
+  <!--end::Page-->
+</div>
+<!--end::Root-->
+
+<app-scripts-init></app-scripts-init>
+<!--begin::Scrolltop-->
+<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
+  <app-scroll-top></app-scroll-top>
+</div>
+<!--end::Scrolltop-->
+
+<!-- begin:: Drawers -->
+<!-- <app-activity-drawer></app-activity-drawer>
+<app-messenger-drawer></app-messenger-drawer> -->
+<!-- end:: Drawers -->
+
+<!-- end:: Engage -->
+<app-engages></app-engages>
+<!-- end:: Engage -->
+
+<!-- begin:: Modals -->
+<!-- <app-main-modal></app-main-modal>
+<app-invite-users-modal></app-invite-users-modal>
+<app-upgrade-plan-modal></app-upgrade-plan-modal> -->
+<!-- end:: Modals -->

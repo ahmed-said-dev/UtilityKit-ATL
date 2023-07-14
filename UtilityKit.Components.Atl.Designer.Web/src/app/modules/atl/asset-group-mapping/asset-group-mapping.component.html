@@ -1,0 +1,342 @@
+<div *ngIf="dataLoading" class="progress-spinner">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+<div *ngIf="!dataLoading">
+  <!--begin::Toolbar-->
+  <div class="toolbar d-flex flex-stack flex-wrap mb-5 mb-lg-7">
+    <!--begin::Page title-->
+    <div class="page-title d-flex flex-column py-1">
+      <!--begin::Title-->
+      <h1 class="d-flex align-items-start flex-column">
+        <span class="text-dark fw-bold fs-1 mb-2"
+          >Transformer Data Loading Board</span
+        >
+      </h1>
+      <!--end::Title-->
+    </div>
+    <!--end::Page title-->
+    <!--begin::Actions-->
+    <div class="d-flex align-items-center py-1">
+      <!--begin::Button-->
+      <a
+        class="btn btn-flex btn-sm btn-primary fw-bold border-0 fs-6 me-3"
+        (click)="openManageMappingRecord()"
+        ><!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+        <span class="svg-icon svg-icon-2">
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              opacity="0.3"
+              d="M11 13H7C6.4 13 6 12.6 6 12C6 11.4 6.4 11 7 11H11V13ZM17 11H13V13H17C17.6 13 18 12.6 18 12C18 11.4 17.6 11 17 11Z"
+              fill="currentColor"
+            />
+            <path
+              d="M22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2C17.5 2 22 6.5 22 12ZM17 11H13V7C13 6.4 12.6 6 12 6C11.4 6 11 6.4 11 7V11H7C6.4 11 6 11.4 6 12C6 12.6 6.4 13 7 13H11V17C11 17.6 11.4 18 12 18C12.6 18 13 17.6 13 17V13H17C17.6 13 18 12.6 18 12C18 11.4 17.6 11 17 11Z"
+              fill="currentColor"
+            />
+          </svg>
+        </span>
+        <!--end::Svg Icon-->Add Mapping Record
+      </a>
+      <!--end::Button-->
+    </div>
+    <!--end::Actions-->
+  </div>
+  <!--end::Toolbar-->
+
+  <div
+    class="d-flex justify-content-center align-content-center align-items-center"
+  >
+    <!--begin::Alert-->
+    <div
+      class="alert alert-warning w-100 d-flex justify-content-center align-content-center align-items-center p-5"
+      *ngIf="mapRecords.length === 0"
+    >
+      <!--begin::Icon-->
+      <span class="svg-icon svg-icon-2hx svg-icon-warning me-3">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <rect
+            opacity="0.3"
+            x="2"
+            y="2"
+            width="20"
+            height="20"
+            rx="10"
+            fill="currentColor"
+          />
+          <rect
+            x="11"
+            y="14"
+            width="7"
+            height="2"
+            rx="1"
+            transform="rotate(-90 11 14)"
+            fill="currentColor"
+          />
+          <rect
+            x="11"
+            y="17"
+            width="2"
+            height="2"
+            rx="1"
+            transform="rotate(-90 11 17)"
+            fill="currentColor"
+          />
+        </svg>
+      </span>
+      <!--end::Icon-->
+      <!--begin::Wrapper-->
+      <div class="d-flex flex-column">
+        <!--begin::Title-->
+        <h4 class="text-warning mb-0">No Mapping Records Found</h4>
+        <!--end::Title-->
+      </div>
+      <!--end::Wrapper-->
+    </div>
+    <!--end::Alert-->
+  </div>
+
+  <div class="row gy-5 g-xl-8" *ngIf="mapRecords.length > 0">
+    <!--begin::Col-->
+    <div class="col-xxl-12" *ngFor="let mapRecord of mapRecords">
+      <div class="card card-xxl-stretch">
+        <div class="card-body py-1">
+          <h1>{{ mapRecord.percentage }} %</h1>
+
+          <h6 class="text-danger"
+            *ngFor="
+              let completenessCriteria of mapRecord.completenessCriteriaJson
+            "
+          >
+            {{ completenessCriteria.comment }}
+          </h6>
+
+          <div
+            class="d-flex justify-content-between align-items-center flex-sm-nowrap"
+          >
+            <div class="me-5 text-gray-200 fs-5hx fw-bolder text-left mb-10">
+              {{ mapRecord.order }}
+            </div>
+            <div class="flex-grow-1 pb-10">
+              <!--begin::Title-->
+              <h4 class="mb-1 text-dark">
+                {{ mapRecord.dataSource?.name }}
+                <span class="badge badge-light-success">Active</span>
+              </h4>
+              <!--end::Title-->
+              <!--begin::Content-->
+              <div class="text-muted fw-semibold">
+                {{ mapRecord.sourceDataJson.dataSourceEntityName }}
+              </div>
+              <span class="text-muted fw-semibold">{{
+                mapRecord.sourceDataJson.whereClause
+              }}</span>
+              <!--end::Content-->
+            </div>
+            <div
+              class="d-flex justify-content-center align-content-center align-items-center"
+            >
+              <!--begin::Content-->
+              <div class="d-flex align-items-center text-muted fw-semibold">
+                <span class="svg-icon svg-icon-muted svg-icon-2hx"
+                  ><svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      x="4.36396"
+                      y="11.364"
+                      width="16"
+                      height="2"
+                      rx="1"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </span>
+                {{
+                  mapRecord.mapMode === MapModeEnum.insert ? "Insert" : "Update"
+                }}
+
+                <span class="svg-icon svg-icon-muted svg-icon-2hx"
+                  ><svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <rect
+                      opacity="0.5"
+                      x="18"
+                      y="13"
+                      width="13"
+                      height="2"
+                      rx="1"
+                      transform="rotate(-180 18 13)"
+                      fill="currentColor"
+                    />
+                    <path
+                      d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                </span>
+              </div>
+
+              <h4 class="mb-1 text-dark mx-10">
+                {{ mapRecord.destinationNetworkJson.assetTypeName }}
+              </h4>
+
+              <!--begin::Actions-->
+              <div class="d-flex my-5">
+                <a
+                  placement="top"
+                  ngbTooltip="Clone"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"
+                  (click)="clone(mapRecord.id)"
+                >
+                  <span
+                    [inlineSVG]="
+                      './assets/media/icons/duotune/general/gen054.svg'
+                    "
+                    class="svg-icon svg-icon-3"
+                  ></span>
+
+                  <!--end::Svg Icon-->
+                </a>
+                <a
+                  placement="top"
+                  ngbTooltip="Edit"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"
+                  (click)="openManageMappingRecord(mapRecord.id)"
+                >
+                  <span
+                    [inlineSVG]="
+                      './assets/media/icons/duotune/general/gen055.svg'
+                    "
+                    class="svg-icon svg-icon-3"
+                  ></span>
+
+                  <!--end::Svg Icon-->
+                </a>
+                <a
+                  placement="top"
+                  ngbTooltip="Delete"
+                  class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-3"
+                  (click)="delete(mapRecord.id)"
+                >
+                  <span
+                    [inlineSVG]="
+                      './assets/media/icons/duotune/general/gen027.svg'
+                    "
+                    class="svg-icon svg-icon-3"
+                  ></span>
+
+                  <!--end::Svg Icon-->
+                </a>
+                <a
+                  class="btn btn-sm btn-light me-3"
+                  (click)="openFieldMapping(mapRecord)"
+                  >Field
+                </a>
+                <a
+                  *ngIf="displayTerminal"
+                  class="btn btn-sm btn-light me-3"
+                  (click)="openConfigureTerminal(mapRecord)"
+                >
+                  Terminal
+                </a>
+                <a
+                  *ngIf="display3D"
+                  class="btn btn-sm btn-light me-3"
+                  (click)="openConfigure3D(mapRecord)"
+                >
+                  3D</a
+                >
+                <a
+                  *ngIf="displayContainment"
+                  class="btn btn-sm btn-light me-3"
+                  (click)="openConfigureContainment(mapRecord)"
+                >
+                  Containment</a
+                >
+                <a
+                  *ngIf="displayAttachment"
+                  class="btn btn-sm btn-light me-3"
+                  (click)="openConfigureStructre(mapRecord)"
+                >
+                  Structure</a
+                >
+                <a
+                  *ngIf="displayAssembly"
+                  class="btn btn-sm btn-light me-3"
+                  (click)="openConfigureAssembly(mapRecord)"
+                >
+                  Assembly</a
+                >
+                <a
+                  class="btn btn-sm btn-danger me-3"
+                  *ngIf="mapRecord.isActive"
+                  (click)="Activation(false, mapRecord.id)"
+                  >DeActivate
+                </a>
+                <a
+                  class="btn btn-sm btn-info me-3"
+                  *ngIf="!mapRecord.isActive"
+                  (click)="Activation(true, mapRecord.id)"
+                  >Activate
+                </a>
+              </div>
+              <!--end::Actions-->
+              <!--end::Content-->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--end::Col-->
+  </div>
+</div>
+<app-manage-mapping-record
+  [assetGroupMappingData]="assetGroupMappingData"
+  (assetGroupId)="getAssetGroupId()"
+  #manageMappingRecordComponent
+></app-manage-mapping-record>
+<app-field-mapping
+  #fieldMappingComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-field-mapping>
+<app-configure-three-d
+  #configureThreeDComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-configure-three-d>
+<app-configure-terminal
+  #configureTerminalComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-configure-terminal>
+<app-configure-containment
+  #configureContainmentComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-configure-containment>
+<app-configure-structure
+  #configureStructureComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-configure-structure>
+<app-configure-assembly
+  #configureAssemblyComponent
+  (onCompletenessChanged)="handleonCompletenessChanged()"
+></app-configure-assembly>

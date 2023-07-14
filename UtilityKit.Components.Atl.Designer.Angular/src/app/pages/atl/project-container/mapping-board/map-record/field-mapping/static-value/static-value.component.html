@@ -1,0 +1,72 @@
+<ng-template let-modal #StaticValueTemplate>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Set to Static Value</h3>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          placement="top"
+          ngbTooltip="Close"
+          (click)="close()"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr088.svg'"
+            class="svg-icon svg-icon-muted svg-icon-1"
+          ></span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <div class="card-body card-scroll max-h-400px">
+      <form [formGroup]="staticValueForm">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label for="" class="form-label">Field Name</label>
+            <input
+              type="text"
+              name="fieldname"
+              class="form-control form-control-sm"
+              [value]="destinationFieldName"
+              readonly
+              disabled
+            />
+          </div>
+          <div class="col-12 mb-4">
+            <label for="" class="form-label">Set to Value</label>
+            <input
+              type="text"
+              name="value"
+              class="form-control form-control-sm"
+              placeholder="value"
+              formControlName="staticValue"
+              [ngbTooltip]="staticValue?.invalid && (staticValue?.dirty || staticValue?.touched) && staticValue?.errors?.['required'] ? staticValueRequired : ''"
+              [ngClass]="{'is-invalid': staticValue?.invalid && (staticValue?.dirty || staticValue?.touched) && (staticValue?.errors?.['required'])}"
+            />
+            <ng-template placement="top right" #staticValueRequired>
+              <span class="text-danger">Value is required!</span></ng-template
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer text-end py-5">
+      <button
+        type="button"
+        class="btn btn-sm btn-secondary me-2"
+        (click)="close()"
+      >
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-dark"
+        [disabled]="!staticValueForm.valid || saving"
+        (click)="save()"
+      >
+        <span [ngClass]="saving ? 'inprogress' : ''">Save</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

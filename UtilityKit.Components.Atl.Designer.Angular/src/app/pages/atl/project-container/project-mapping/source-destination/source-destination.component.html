@@ -1,0 +1,36 @@
+<div style="height: calc(100% - 60px)">
+  <app-destination
+    #destination
+    (connectUnd)="handleOnConnectUND($event)"
+    [uNDProjectId]="undProjectId"
+    [undHasMapRecords]="this.mapRecordsCount > 0"
+  ></app-destination>
+
+  <app-data-source
+    #source
+    (connectDataSource)="handleConnectDataSource($event)"
+    [atlProjectId]="aTLProjectId"
+  ></app-data-source>
+</div>
+
+<div class="h-60px mh-60px">
+  <div
+    class="page-title d-flex justify-content-between align-items-center flex-wrap px-4 border-1 border-top pt-4"
+  >
+    <span class="page-heading fw-normal d-flex justify-content-center my-0">
+      <span class="fw-bold me-2">({{ this.mapRecordsCount }})</span>
+      Mapped Records
+    </span>
+    <a
+      class="btn btn-sm fw-bold btn-dark"
+      (click)="openMappingBoard()"
+      [class.disabled]="!isUndConnected || !isDataSourceConnected"
+    >
+      <span
+        [inlineSVG]="'./assets/media/icons/duotune/arrows/arr027.svg'"
+        class="svg-icon svg-icon-2"
+      ></span>
+      Start Mapping
+    </a>
+  </div>
+</div>

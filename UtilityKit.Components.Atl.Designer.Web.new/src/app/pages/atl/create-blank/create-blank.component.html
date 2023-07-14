@@ -1,0 +1,83 @@
+<ng-template let-modal #createBlankModalContent>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4 class="card-title">Create Blank Project</h4>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          (click)="close()"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr088.svg'"
+            class="svg-icon svg-icon-muted svg-icon-1"
+          ></span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <form [formGroup]="createBlankForm" novalidate>
+      <div class="card-body py-3">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label for="name" class="form-label required">Name</label>
+            <input
+              type="text"
+              name="name"
+              class="form-control form-control-sm"
+              placeholder="Name"
+              formControlName="name"
+              id="name"
+              minlength="1"
+              maxlength="=100"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['required'] ? required : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['maxlength'] ? maxLength : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['minlength'] ? minLength : ''"
+              [ngClass]="{'is-invalid': name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['required']||name?.errors?.['maxlength']||name?.errors?.['minlength']}"
+            />
+
+            <ng-template placement="top right" #required>
+              <span class="text-danger"> Name is required!</span></ng-template
+            >
+            <ng-template placement="top right" #maxLength>
+              <span class="text-danger">maxLength is 100!</span></ng-template
+            >
+            <ng-template placement="top right" #minLength>
+              <span class="text-danger">minLength is 1!</span></ng-template
+            >
+          </div>
+          <div class="col-12">
+            <label for="" class="form-label">Description</label>
+            <textarea
+              class="form-control form-control-sm"
+              rows="4"
+              placeholder="Description"
+              name="Description"
+              formControlName="description"
+              maxlength="250"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer text-end">
+        <button
+          type="button"
+          class="btn btn-sm btn-light me-2"
+          (click)="close()"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          (click)="save()"
+          (keyup.enter)="save()"
+          class="btn btn-sm btn-primary"
+          [disabled]="!createBlankForm.valid || saving"
+        >
+          <span [ngClass]="saving ? 'inprogress' : ''">Create</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

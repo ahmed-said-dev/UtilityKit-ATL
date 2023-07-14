@@ -1,0 +1,108 @@
+<ng-template let-modal #createBlankModalContent>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Create Blank Project</h3>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          (click)="close()"
+        >
+          <span class="svg-icon svg-icon-muted svg-icon-1"
+            ><svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                opacity="0.5"
+                x="7.05025"
+                y="15.5356"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(-45 7.05025 15.5356)"
+                fill="currentColor"
+              />
+              <rect
+                x="8.46447"
+                y="7.05029"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(45 8.46447 7.05029)"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <div class="card-body card-scroll max-h-400px">
+      <form [formGroup]="createBlankForm" novalidate>
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label for="name" class="form-label required">Name</label>
+            <input
+              type="text"
+              name="name"
+              class="form-control form-control-sm6"
+              placeholder="Name"
+              formControlName="name"
+              id="name"
+              minlength="1"
+              maxlength="=100"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['required'] ? required : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['maxlength'] ? maxLength : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['minlength'] ? minLength : ''"
+              [ngClass]="{'is-invalid': name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['required']||name?.errors?.['maxlength']||name?.errors?.['minlength']}"
+            />
+
+            <ng-template placement="top right" #required>
+              <span class="text-danger"> Name is required!</span></ng-template
+            >
+            <ng-template placement="top right" #maxLength>
+              <span class="text-danger">maxLength is 100!</span></ng-template
+            >
+            <ng-template placement="top right" #minLength>
+              <span class="text-danger">minLength is 1!</span></ng-template
+            >
+          </div>
+          <div class="col-12 mb-4">
+            <label for="" class="form-label">Description</label>
+            <textarea
+              class="form-control form-control-sm"
+              rows="4"
+              placeholder="Description"
+              name="Description"
+              formControlName="description"
+              maxlength="250"
+            ></textarea>
+          </div>
+        </div>
+        <div class="card-footer text-end">
+          <button
+            type="button"
+            class="btn btn-sm btn-light me-2"
+            (click)="close()"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            (click)="save()"
+            (keyup.enter)="save()"
+            class="btn btn-sm btn-primary"
+            [disabled]="!createBlankForm.valid || saving"
+          >
+            <span [ngClass]="saving ? 'inprogress' : ''">Create</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</ng-template>

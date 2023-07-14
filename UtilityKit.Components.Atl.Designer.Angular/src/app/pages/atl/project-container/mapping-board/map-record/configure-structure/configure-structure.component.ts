@@ -1,0 +1,352 @@
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+import { catchError, finalize, of, switchMap } from 'rxjs';
+import {
+  AssetTable,
+  Network,
+  ShowHideModeEnum,
+  StructureAttachmentSettingsInputDto,
+  UNDProject,
+} from 'src/app/pages/models/atl-project-model';
+import { AtlProjectService } from 'src/app/pages/services/atl-project.service';
+import {
+  AddStructureSettingsToMapRecordRequestDto,
+  GetMapRecordDto,
+  GetStructureSettingsMapRecordForEditResponce,
+  SpatialRelationShip,
+  StructureSettingsDto,
+  StructureTargetDto,
+} from 'src/app/pages/models/map-record.model';
+import { MapRecordService } from 'src/app/pages/services/map-record.service';
+
+import { ConfigureStructureForm } from './configure-structure.form';
+import { TreeNodeClass } from 'src/app/shared/helpers/tree.helper';
+import { Location } from '@angular/common';
+import { AssetGroupMappingService } from 'src/app/pages/services/mapping-board.service';
+import { ActivatedRoute } from '@angular/router';
+import { SwalService } from 'src/app/shared/services/Swal.service';
+
+@Component({
+  selector: 'app-configure-structure',
+  templateUrl: './configure-structure.component.html',
+  styleUrls: ['./configure-structure.component.scss'],
+})
+export class ConfigureStructureComponent implements OnInit {
+  atlProjectId: any;
+  networks: Network[] = [];
+  undProject: UNDProject = new UNDProject();
+  filteredAssetTables: AssetTable[] = [];
+  undProjectId: any;
+  ShowHideMode = ShowHideModeEnum;
+  selectedAsset: TreeNodeClass[] = [];
+  treeDataSource: TreeNodeClass[] = [];
+  dataArray: string[] = [];
+  saving = false;
+  mapRecordId: string;
+  spatialRelationShip = SpatialRelationShip;
+  configureStructureForm: ConfigureStructureForm;
+  addStructureSettings: AddStructureSettingsToMapRecordRequestDto =
+    new AddStructureSettingsToMapRecordRequestDto();
+  constructor(
+    private _aTLProjectService: AtlProjectService,
+    private cdr: ChangeDetectorRef,
+    private _mapRecordService: MapRecordService,
+    private _spinnerService: NgxSpinnerService,
+    private modal: NgbModal,
+    private fb: FormBuilder,
+    private _toastrService: ToastrService,
+    private _location: Location,
+    private _assetGroupMappingService: AssetGroupMappingService,
+    private _activatedRoute: ActivatedRoute,
+    private _swalService: SwalService
+  ) {}
+
+  ngOnInit(): void {
+    this._activatedRoute.params.subscribe((params) => {
+      this.intializeForm();
+      this.show(this._activatedRoute.snapshot.queryParams['id']);
+    });
+
+    this.intializeForm();
+  }
+
+  private intializeForm() {
+    this.configureStructureForm = new ConfigureStructureForm(
+      this.addStructureSettings
+    );
+  }
+
+  private resetCurrentForm() {
+    this.configureStructureForm.reset();
+  }
+
+  get() {
+    this._spinnerService.show();
+
+    let structuralAttachementInput =
+      this._assetGroupMappingService.getStructureSettings();
+
+    let undObservable =
+      this._aTLProjectService.getUndDetailsForStructuralAttachement(
+        structuralAttachementInput
+      );
+
+    let structureSettingsMapRecord =
+      this._mapRecordService.getStructureSettingsForEditQuery(this.mapRecordId);
+
+    undObservable
+      .pipe(
+        catchError((errorMessage) => {
+          return of(errorMessage);
+        }),
+        finalize(() => {
+          this._spinnerService.hide();
+        }),
+        switchMap((undProject: UNDProject) => {
+          this.undProject = undProject;
+          this.networks.push(...this.undProject.network);
+
+          this.networks.forEach((element) => {
+            this.filteredAssetTables.push(...element.assetTables);
+          });
+          this.formateTreeStructureFromAssetTable(this.filteredAssetTables);
+
+          return structureSettingsMapRecord;
+        })
+      )
+      .subscribe((result: GetStructureSettingsMapRecordForEditResponce) => {
+        let structureSettings =
+          result.getStructureSettingsForEdit.structureSettingsJson;
+        if (structureSettings && structureSettings) {
+          this.dataArray = structureSettings.structureTargets.map(
+            (ct) => ct.key!
+          );
+          this.spatialRelation?.setValue(structureSettings.relationShip);
+        }
+
+        this.checkNode(this.treeDataSource, this.dataArray);
+        this.checkTreeValidation();
+        this.cdr.detectChanges();
+
+        this._spinnerService.hide();
+      });
+  }
+
+  get tree() {
+    return this.configureStructureForm.get('tree');
+  }
+
+  checkTreeValidation() {
+    if (this.selectedAsset.length == 0) {
+      this.tree?.setValidators(Validators.required);
+    } else {
+      this.tree?.clearValidators();
+    }
+    this.tree?.updateValueAndValidity();
+  }
+  get spatialRelation() {
+    return this.configureStructureForm.get('spatialRelation');
+  }
+
+  save() {
+    this.saving = true;
+    let structureSettings: AddStructureSettingsToMapRecordRequestDto =
+      new AddStructureSettingsToMapRecordRequestDto();
+    structureSettings.structureSettingsJson = this.formbackEdnObject();
+    structureSettings.structureSettingsJson.relationShip =
+      this.spatialRelation?.value;
+
+    structureSettings.mapRecordId = this.mapRecordId!;
+
+    // return;
+    this._mapRecordService
+      .addStructureSettingsToMapRecord(structureSettings)
+      .pipe(
+        finalize(() => {
+          this.saving = false;
+        })
+      )
+      .subscribe({
+        next: (result) => {
+          this.saving = false;
+          this.close();
+          this._toastrService.success(
+            'Structure settings has been added to map record Successfully',
+            'Success'
+          );
+        },
+        error: (e) => {
+          this._toastrService.error(e.error.Message, 'Error');
+        },
+      });
+  }
+
+  delete() {
+    this._swalService.confirmation(
+      'Delete 3D',
+      `Are you sure to delete this structure settings?`,
+      () => {
+        this._spinnerService.show();
+
+        let structureSettings: AddStructureSettingsToMapRecordRequestDto =
+          new AddStructureSettingsToMapRecordRequestDto();
+        structureSettings.structureSettingsJson = null;
+        structureSettings.mapRecordId = this.mapRecordId!;
+
+        this._mapRecordService
+          .addStructureSettingsToMapRecord(structureSettings)
+          .pipe(
+            finalize(() => {
+              this._spinnerService.hide();
+            })
+          )
+          .subscribe({
+            next: (result) => {
+              this.close();
+              this._toastrService.success(
+                'Structure settings has been deleted Successfully',
+                'Success'
+              );
+              this.resetCurrentForm();
+            },
+            error: (e) => {
+              this._toastrService.error(e.error.Message, 'Error');
+            },
+          });
+      }
+    );
+  }
+
+  formateTreeStructureFromAssetTable(assetTables: AssetTable[]) {
+    let treeDataSource: TreeNodeClass[] = [];
+    assetTables.forEach((assetTable) => {
+      let assetTableVar: TreeNodeClass = new TreeNodeClass();
+      assetTableVar.key = assetTable.id;
+      assetTableVar.label = assetTable.name;
+
+      assetTable.assetGroups.forEach((assetGroup) => {
+        let assetGroupVar: TreeNodeClass = new TreeNodeClass();
+        assetGroupVar.key = assetGroup.id;
+        assetGroupVar.label = assetGroup.name;
+        assetGroupVar.parent = assetTableVar;
+        assetTableVar.children?.push(assetGroupVar);
+
+        assetGroup.assetTypes.forEach((assetType) => {
+          let assetTypeVar: TreeNodeClass = new TreeNodeClass();
+          assetTypeVar.key = assetType.id;
+          assetTypeVar.label = assetType.name;
+          assetTypeVar.parent = assetGroupVar;
+
+          assetGroupVar.children?.push(assetTypeVar);
+        });
+      });
+      treeDataSource.push(assetTableVar);
+    });
+    // console.log(treeDataSource);
+    // this.treeDataSource = [];
+    this.treeDataSource = treeDataSource;
+  }
+
+  show(mapRecordId: string) {
+    this.mapRecordId = mapRecordId;
+    this.get();
+  }
+
+  close() {
+    this.treeDataSource = [];
+    this.dataArray = [];
+    this.selectedAsset = [];
+    this.networks = [];
+    this.filteredAssetTables = [];
+    this.resetCurrentForm();
+    this.modal.dismissAll();
+    this._location.back();
+  }
+
+  nodeSelect() {
+    this.checkTreeValidation();
+    // this.formbackEdnObject();
+    // console.log(this.selectedAsset);
+  }
+
+  nodeUnSelect() {
+    this.checkTreeValidation();
+    // this.formbackEdnObject();
+    // console.log(this.selectedAsset);
+  }
+
+  formbackEdnObject() {
+    let ClonedObject: TreeNodeClass<any>[] = [];
+    ClonedObject = [...this.selectedAsset];
+    ClonedObject = ClonedObject.filter((sa) => sa.children?.length == 0);
+
+    let structureSettings: StructureSettingsDto = new StructureSettingsDto();
+    ClonedObject.forEach((element) => {
+      let structureTarget: StructureTargetDto = new StructureTargetDto();
+      structureTarget.assetTableName = element.parent?.parent?.label;
+      structureTarget.assetGroupName = element.parent?.label;
+      structureTarget.assetTypeName = element.label;
+      structureTarget.key = element.key;
+      structureSettings.structureTargets.push(structureTarget);
+    });
+    structureSettings.relationShip =
+      this.configureStructureForm.controls['spatialRelation']?.value;
+    console.log(structureSettings);
+    return structureSettings;
+  }
+
+  checkNode(nodes: TreeNodeClass[], str: string[] = []) {
+    for (let i = 0; i < nodes?.length; i++) {
+      if (!nodes[i].leaf) {
+        for (let j = 0; j < nodes[i].children?.length!; j++) {
+          if (str.includes(nodes[i].children[j].key!)) {
+            if (!this.selectedAsset.includes(nodes[i].children[j])) {
+              this.selectedAsset.push(nodes[i].children[j]);
+            }
+          }
+        }
+      } else {
+        if (str.includes(nodes[i].key!)) {
+          if (!this.selectedAsset.includes(nodes[i])) {
+            this.selectedAsset.push(nodes[i]);
+          }
+        }
+      }
+      if (nodes[i].leaf) {
+        continue;
+      } else {
+        this.checkNode(nodes[i].children, str);
+        const count = nodes[i].children?.length;
+        let c = 0;
+        for (let j = 0; j < nodes[i].children?.length!; j++) {
+          if (this.selectedAsset.includes(nodes[i].children[j])) {
+            c++;
+          }
+          if (nodes[i].children[j].partialSelected) {
+            nodes[i].partialSelected = true;
+          }
+        }
+        if (c === 0) {
+        } else if (c === count) {
+          nodes[i].partialSelected = false;
+          if (!this.selectedAsset.includes(nodes[i])) {
+            this.selectedAsset.push(nodes[i]);
+            // console.log(this.selectedAsset);
+          }
+        } else {
+          nodes[i].partialSelected = true;
+        }
+      }
+    }
+  }
+}

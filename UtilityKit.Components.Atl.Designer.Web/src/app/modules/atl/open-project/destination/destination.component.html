@@ -1,0 +1,179 @@
+<div>
+  <div *ngIf="!isATLConnectUND">
+    <div class="d-flex justify-content-between align-items-center my-5">
+      <!--begin::Title-->
+      <h3 class="card-title align-items-start flex-column">
+        <span class="card-label fw-bold fs-3 mb-1" style="color: #009ef7"
+          >Utility Network Destination</span
+        >
+      </h3>
+      <!--end::Title-->
+    </div>
+    <div
+      class="d-flex flex-column justify-content-center align-items-center max-h-350px h-350px"
+    >
+      <!--begin::Svg Icon | path: icons/duotune/finance/fin006.svg-->
+
+      <!--end::Svg Icon-->
+      <p class="text-muted text-center">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam
+        cumque autem nostrum ullam commodi veritatis inventore neque
+        reprehenderit libero quam illo, sequi consectetur odio ipsam ea atque,
+        quas totam blanditiis! Lorem, ipsum dolor sit amet consectetur
+        adipisicing elit. Delectus tempora eligendi esse maiores quos iusto eos
+        maxime eius veniam distinctio natus fugit.
+      </p>
+
+      <div
+        class="und-style btn btn-outline btn-outline-dashed btn-active-light h-xl-150px h-100 w-100 d-flex align-content-center justify-content-center align-items-center"
+        (click)="openConnectToUnd()"
+      >
+        <div>
+          <div class="text-gray-800 d-flex flex-column cursor-pointer">
+            <!--begin::Svg Icon | path: icons/duotune/finance/fin006.svg-->
+            <span
+              [inlineSVG]="
+                './assets/media/icons/duotune/splash/project-creation/und.svg'
+              "
+              class="svg-icon svg-icon-5x mb-3 me-0"
+            ></span>
+            <!--end::Svg Icon-->
+          </div>
+          <div class="fs-5 fw-bold">Connect to UND</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="isATLConnectUND">
+    <div class="d-flex justify-content-between align-items-center my-5">
+      <!--begin::Title-->
+      <h3
+        class="card-title align-items-start flex-column"
+        style="color: #009ef7"
+      >
+        <span class="card-label fw-bold fs-3 mb-1"
+          >Utility Network Destination
+        </span>
+      </h3>
+      <!--end::Title-->
+
+      <!--begin::Toolbar-->
+      <div class="card-toolbar">
+        <a
+          class="btn btn-icon btn-sm btn-bg-light btn-active-color-primary me-2"
+          placement="top"
+          ngbTooltip="Refresh"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr029.svg'"
+            class="svg-icon svg-icon-2"
+          ></span>
+          <!--end::Svg Icon-->
+        </a>
+        <a
+          class="btn btn-icon btn-sm btn-bg-light btn-active-color-primary"
+          placement="top"
+          ngbTooltip="Disconnect"
+          *ngIf="isATLConnectUND"
+          (click)="handleDisconnect(undHasMapRecords)"
+        >
+          <!-- (keydown.enter)="(isATLConnectUND)" -->
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/coding/cod008.svg'"
+            class="svg-icon svg-icon-2"
+          ></span>
+        </a>
+      </div>
+    </div>
+    <div class="card-scroll px-3 max-h-350px h-350px">
+      <div class="row">
+        <div class="col-12">
+          <!--begin::Alert-->
+          <div class="alert bg-light d-flex align-items-center p-5">
+            <!--begin::Wrapper-->
+            <div class="d-flex flex-column">
+              <!--begin::Title-->
+              <h4 class="mb-1 text-dark">
+                {{ undProject?.name }}
+                <!-- <span class="text-muted fw-semibold fs-8">- Version 1.0.1.1 </span> -->
+              </h4>
+              <!--end::Title-->
+              <!--begin::Content-->
+              <span class="text-muted fw-semibold">{{
+                undProject?.datesetName
+              }}</span>
+              <span class="text-muted fw-semibold">{{
+                undProject?.serviceAreaFeatureClassName
+              }}</span>
+              <!--end::Content-->
+            </div>
+            <!--end::Wrapper-->
+          </div>
+          <!--end::Alert-->
+        </div>
+
+        <div class="col-6" *ngFor="let domin of undProject?.network">
+          <div
+            class="card card-xxl-stretch mb-4"
+            style="border-color: #009ef76b"
+          >
+            <!--begin::Card body-->
+            <div class="card-body py-4">
+              <!--begin::Details-->
+              <div class="d-flex flex-wrap align-items-center flex-sm-nowrap">
+                <!--begin::Wrapper-->
+                <div class="flex-grow-1">
+                  <!--begin::Head-->
+                  <div
+                    class="d-flex justify-content-between align-items-center align-content-center flex-wrap"
+                  >
+                    <div
+                      class="d-flex flex-wrap align-items-start flex-sm-nowrap flex-column grow-1"
+                    >
+                      <!--begin::Title-->
+                      <h4 class="mb-5 text-dark fs-5">{{ domin.name }}</h4>
+                      <!--end::Title-->
+                      <!--begin::Row-->
+                      <div
+                        class="d-flex align-items-center mb-3"
+                        *ngFor="let assetTable of domin.assetTables"
+                      >
+                        <!--begin::Bullet-->
+                        <span
+                          [inlineSVG]="
+                            './assets/media/icons//duotune/aside/featureclass.svg'
+                          "
+                          class="svg-icon svg-icon-2 me-3"
+                        ></span>
+                        <!--end::Bullet-->
+                        <!--begin::Label-->
+                        <div class="text-gray-600 fw-semibold fs-6">
+                          {{ assetTable.name }}
+                          <span class="fw-bold" style="color: #009ef7"
+                            >({{ assetTable?.assetGroups?.length }})</span
+                          >
+                        </div>
+                        <!--end::Label-->
+                      </div>
+                      <!--end::Row-->
+                    </div>
+
+                    <!--end::Head-->
+                  </div>
+                  <!--end::Wrapper-->
+                </div>
+                <!--end::Details-->
+              </div>
+              <!--end::Card body-->
+            </div>
+            <!--end::Card-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-connect-to-und
+  (connect)="handleUNDConnect($event)"
+  #connectUNDModal
+></app-connect-to-und>

@@ -1,0 +1,148 @@
+<div class="card bg-transparent px-4 h-50">
+  <div class="card-header border-0 p-0 h-40px mh-40px">
+    <!--begin::Page title-->
+    <div class="d-flex">
+      <h1
+        class="page-heading d-flex align-items-center text-dark fw-bold fs-4 justify-content-center my-0 text-capitalize"
+      >
+        Destination Connection
+        <span class="ms-1 fs-7 text-muted">
+          (
+          {{
+            undProject?.name
+              ? (undProject?.name! | truncate : [35, "..."])
+              : "No UND Projects Connected"
+          }}
+          )
+        </span>
+      </h1>
+    </div>
+    <div class="d-flex align-items-center">
+      <!--begin::Primary button-->
+      <a
+        class="btn btn-icon btn-sm btn-color-dark align-items-center"
+        data-kt-menu-trigger="click"
+        data-kt-menu-placement="bottom-end"
+        placement="left"
+        ngbTooltip="Quick Actions"
+      >
+        <i class="fa-solid fa-ellipsis fs-5"></i>
+      </a>
+      <div
+        class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light fw-semibold w-150px py-4"
+        data-kt-menu="true"
+      >
+        <div class="menu-item">
+          <a
+            class="menu-link px-4 btn btn-sm btn-active-light text-hover-primary"
+            [class.disabled]="!isATLConnectUND"
+            (click)="handleDisconnect(undHasMapRecords)"
+          >
+            <span
+              [inlineSVG]="'./assets/media/icons/duotune/coding/cod008.svg'"
+              class="svg-icon svg-icon-1x me-2"
+            ></span>
+            Disconnect</a
+          >
+        </div>
+      </div>
+      <!--end::Primary button-->
+    </div>
+    <!--end::Page title-->
+  </div>
+  <div class="card-body p-0 pb-4" style="height: calc(100% - 40px)">
+    <ng-container *ngIf="!isATLConnectUND">
+      <div
+        class="btn btn-outline border-dashed border-2 border btn-active-light border-active-secondary d-flex flex-column flex-stack justify-content-center py-0 h-100 w-100"
+        (click)="openConnectToUnd()"
+      >
+        <img
+          src="./assets/media/backgrounds/add-file.gif"
+          class="w-100px"
+          alt="add-file"
+        />
+        <h1 class="text-gray-800 fw-semibold fs-5 mt-4">Connect to UND</h1>
+        <span class="text-center fs-8 fw-medium text-gray-400 mb-lg-3 w-75">
+          Connect to one of the UtilityKit Designer projects to set up the
+          destination data model for planning the migration project.
+        </span>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="isATLConnectUND">
+      <ul
+        class="nav nav-tabs nav-line-tabs nav-line-tabs-2x fw-semibold mb-4 h-30px mh-30px"
+      >
+        <li
+          class="nav-item cursor-pointer"
+          *ngFor="let network of this.undProject?.network"
+          (click)="changeTab(network.id)"
+        >
+          <a
+            class="nav-link text-active-primary fs-8 text-capitalize"
+            data-bs-toggle="tab"
+            [attr.aria-selected]="activeTabId === network.id"
+            [class.active]="activeTabId === network.id"
+          >
+            {{ network.name | truncate : [20, "..."] }}
+          </a>
+        </li>
+      </ul>
+      <div style="height: calc(100% - 30px)" class="overflow-auto">
+        <div class="h-100">
+          <div class="tab-content" id="myTabContent">
+            <div *ngFor="let network of this.undProject?.network">
+              <ng-container *ngIf="activeTabId === network.id">
+                <div class="px-3">
+                  <div class="row">
+                    <div
+                      class="col-4"
+                      *ngFor="
+                        let assetTable of network.assetTables;
+                        let highlightedAssetTable = index
+                      "
+                    >
+                      <div
+                        class="card border border-hover-primary border-active-primary mb-4 h-70px cursor-pointer overflow-hidden"
+                        ngbTooltip="View Catalog"
+                        [class.active]="
+                          highlightedAssetTableRow === highlightedAssetTable
+                        "
+                        (click)="
+                          openViewCatalog(assetTable, highlightedAssetTable)
+                        "
+                      >
+                        <div
+                          class="card-body p-4 py-2 d-flex flex-column justify-content-end"
+                        >
+                          <div class="text-end icon-position">
+                            <span
+                              [inlineSVG]="assetTable.icon"
+                              class="svg-icon svg-icon svg-icon-primary svg-icon-1"
+                            ></span>
+                          </div>
+
+                          <div class="fw-bold fs-3">
+                            {{ assetTable?.assetGroups?.length }}
+                          </div>
+
+                          <div class="fw-semibold" [ngClass]="'fs-8'">
+                            {{ assetTable.name | truncate : [35, "..."] }}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<app-connect-to-und
+  (connect)="handleUNDConnect($event)"
+  #connectUNDModal
+></app-connect-to-und>

@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-between flex-column h-100">
+  <div style="height: calc(100% - 60px)">
+    <div class="d-flex justify-content-between flex-column h-100">
+      <div class="h-50 overflow-auto">
+        <app-destination
+          #destination
+          (connectUnd)="handleOnConnectUND($event)"
+          [uNDProjectId]="undProjectId"
+          [undHasMapRecords]="this.mapRecordsCount > 0"
+        ></app-destination>
+      </div>
+      <div class="h-50 overflow-auto">
+        <app-data-source
+          (connectDataSource)="handleConnectDataSource($event)"
+        ></app-data-source>
+      </div>
+    </div>
+  </div>
+  <div class="h-60px mh-60px">
+    <div
+      class="page-title d-flex justify-content-between align-items-center flex-wrap px-4 border-1 border-top pt-4"
+    >
+      <span
+        class="page-heading fw-normal d-flex justify-content-center my-0"
+      >
+        <span class="fw-bold me-2">({{ this.mapRecordsCount }})</span> Mapped Records
+      </span>
+      <a
+        class="btn btn-flex btn-sm btn-primary fw-bold border-0"
+        (click)="openMappingBoard()"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr027.svg'"
+          class="svg-icon svg-icon-2"
+        ></span>
+        Start Mapping
+      </a>
+    </div>
+  </div>
+</div>

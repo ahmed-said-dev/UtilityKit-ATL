@@ -1,0 +1,64 @@
+<ng-template let-modal #autoMapTemplate>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Auto Mapping</h3>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+              placement="top"
+          ngbTooltip="Close"
+          (click)="close()"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr088.svg'"
+            class="svg-icon svg-icon-muted svg-icon-1"
+          ></span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="autoMapForm">
+        <div class="form-check form-check-custom form-check-solid  mb-4">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="radioAutoMapping"
+            id="exactWholeWord"
+            formControlName="radioAutoMapping"
+            [value]="1"
+            (change)="handleRadioChange()"
+          />
+          <label class="form-check-label" for="exactWholeWord">
+            Exact Whole Word
+          </label>
+        </div>
+        <div class="form-check form-check-custom form-check-solid  mb-4">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="radioAutoMapping"
+            formControlName="radioAutoMapping"
+            id="containsWord"
+            [value]="2"
+            (change)="handleRadioChange()"
+          />
+
+          <label class="form-check-label" for="containsWord">
+            Contains word
+          </label>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer py-5 text-end">
+      <button type="button" class="btn btn-sm btn-secondary me-2" (click)="close()">
+        Cancel
+      </button>
+      <button type="button" class="btn btn-sm btn-dark" (click)="save()">
+        <span [ngClass]="saving ? 'inprogress' : ''">Map</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

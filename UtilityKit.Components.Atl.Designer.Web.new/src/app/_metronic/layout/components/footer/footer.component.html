@@ -1,0 +1,27 @@
+<ng-container *ngIf="appFooterContainerCSSClass">
+  <!--begin::Footer container-->
+  <div class="app-container" [ngClass]="appFooterContainerCSSClass">
+    <ng-container *ngTemplateOutlet="footerView"></ng-container>
+  </div>
+  <!--end::Footer container-->
+</ng-container>
+
+<ng-container *ngIf="!appFooterContainerCSSClass">
+  <ng-container *ngTemplateOutlet="footerView"></ng-container>
+</ng-container>
+
+<ng-template #footerView>
+  <!--begin::Copyright-->
+  <div class="text-dark order-2 order-md-1">
+    <span class="text-gray-800 fw-bolder me-1">{{currentDateStr}}&copy;</span>
+    <span class="text-muted fw-bold">Quality Standard for Information Technology</span>
+  </div>
+  <!--end::Copyright-->
+
+  <!--begin::Menu-->
+  <div class="text-dark order-1">
+    <span class="text-muted fw-bold">Version 1.0.0.23</span>
+  </div>
+  <!--end::Menu-->
+
+</ng-template>

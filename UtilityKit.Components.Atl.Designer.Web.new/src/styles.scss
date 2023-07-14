@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+@import "./assets/sass/style.scss";
+@font-face {
+  font-family: 'Poppins', sans-serif;
+  src: url(./assets/fonts/Poppins-Regular.ttf) format('truetype');
+}
+// Replace above style with this css file to enable RTL styles
+@import './assets/sass/plugins.scss';
+// @import "./assets/css/style.rtl.css";
+@import "./assets/sass/style.angular.scss";
+
+
+@import "ngx-toastr/toastr";
+
+.inprogress::after {
+  content: "";
+  display: inline-block;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  height: 10px !important;
+  width: 10px !important;
+  border-right-color: transparent;
+  margin-left: 10px;
+  animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

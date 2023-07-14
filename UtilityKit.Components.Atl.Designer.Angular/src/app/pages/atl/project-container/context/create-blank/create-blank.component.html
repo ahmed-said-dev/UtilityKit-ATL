@@ -1,0 +1,102 @@
+<ng-template let-modal #createBlankModalContent>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h4 class="card-title">
+        <span *ngIf="atlProject.id">Edit Project</span>
+        <span *ngIf="!atlProject.id"> Create Blank Project</span>
+      </h4>
+
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          placement="top"
+          ngbTooltip="Close"
+          (click)="close()"
+        >
+          <span
+            [inlineSVG]="'./assets/media/icons/duotune/arrows/arr088.svg'"
+            class="svg-icon svg-icon-muted svg-icon-1"
+          ></span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <form [formGroup]="createBlankForm" novalidate>
+      <div class="card-body py-3">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label for="name" class="form-label required">Name</label>
+            <input
+              type="text"
+              name="name"
+              class="form-control form-control-sm"
+              placeholder="Name"
+              formControlName="name"
+              id="name"
+              minlength="1"
+              maxlength="100"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['required'] ? required : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['maxlength'] ? maxLength : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['minlength'] ? minLength : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['nameExists'] ? nameExists : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['whiteSpaces'] ? whiteSpaces : ''"
+              [ngClass]="{'is-invalid': name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['required']||name?.errors?.['maxlength']||name?.errors?.['minlength']||name?.errors?.['nameExists']||name?.errors?.['whiteSpaces']}"
+            />
+            <!-- {{name?.errors?.['nameExists']}} -->
+            <ng-template placement="top right" #required>
+              <span class="text-danger">Name is required!</span></ng-template
+            >
+            <ng-template placement="top right" #maxLength>
+              <span class="text-danger">MaxLength is 100!</span></ng-template
+            >
+            <ng-template placement="top right" #minLength>
+              <span class="text-danger">MinLength is 1!</span></ng-template
+            >
+            <ng-template placement="top right" #nameExists>
+              <span class="text-danger"
+                >The Name should be unique!</span
+              ></ng-template
+            >
+            <ng-template placement="top right" #whiteSpaces>
+              <span class="text-danger"
+                >White spaces is invalid!</span
+              ></ng-template
+            >
+          </div>
+          <div class="col-12">
+            <label for="" class="form-label">Description</label>
+            <textarea
+              class="form-control form-control-sm"
+              rows="4"
+              placeholder="Description"
+              name="Description"
+              formControlName="description"
+              maxlength="250"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="card-footer py-5 text-end">
+      <button type="button" class="btn btn-sm btn-secondary me-2" (click)="close()">
+        Cancel
+      </button>
+      <button
+        type="submit"
+        (click)="save()"
+        (keyup.enter)="save()"
+        class="btn btn-sm btn-dark"
+        [disabled]="!createBlankForm.valid || saving"
+      >
+        <span *ngIf="!this.atlProject.id" [ngClass]="saving ? 'inprogress' : ''"
+          >Create</span
+        >
+        <span *ngIf="this.atlProject.id" [ngClass]="saving ? 'inprogress' : ''"
+          >Update</span
+        >
+      </button>
+    </div>
+  </div>
+</ng-template>

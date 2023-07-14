@@ -1,0 +1,148 @@
+<ng-template let-modal #schemaDataSource>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Connect to Geodatabase File</h3>
+
+      <div class="card-toolbar">
+        <!--begin::Close-->
+
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          placement="top"
+          ngbTooltip="Close"
+          (click)="close()"
+        >
+          <span class="svg-icon svg-icon-muted svg-icon-1"
+            ><svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                opacity="0.5"
+                x="7.05025"
+                y="15.5356"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(-45 7.05025 15.5356)"
+                fill="currentColor"
+              />
+
+              <rect
+                x="8.46447"
+                y="7.05029"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(45 8.46447 7.05029)"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+
+          <!--end::Svg Icon-->
+        </div>
+
+        <!--end::Close-->
+      </div>
+    </div>
+
+    <div class="card-body">
+      <form [formGroup]="schemaDataSourceForm" novalidate>
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label for="geodatabaseName" class="form-label"
+              >Geodatabase Name</label
+            >
+            <input
+              type="text"
+              name="name"
+              class="form-control form-control-sm"
+              id="geodatabaseName"
+              minlength="1"
+              maxlength="30"
+              formControlName="name"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['required'] ? required : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['maxlength'] ? maxLength : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['minlength'] ? minLength : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['nameExists'] ? nameExists : ''"
+              [ngbTooltip]="name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['whiteSpaces'] ? whiteSpaces : ''"
+              [ngClass]="{'is-invalid': name?.invalid && (name?.dirty || name?.touched) && name?.errors?.['required']||name?.errors?.['maxlength']||name?.errors?.['minlength']||name?.errors?.['nameExists']||name?.errors?.['whiteSpaces']}"
+            />
+
+            <ng-template placement="top right" #required>
+              <span class="text-danger">Name is required!</span></ng-template
+            >
+            <ng-template placement="top right" #maxLength>
+              <span class="text-danger">MaxLength is 30!</span></ng-template
+            >
+            <ng-template placement="top right" #minLength>
+              <span class="text-danger">MinLength is 1!</span></ng-template
+            >
+            <ng-template placement="top right" #nameExists>
+              <span class="text-danger"
+                >The Name should be unique!</span
+              ></ng-template
+            >
+            <ng-template placement="top right" #whiteSpaces>
+              <span class="text-danger"
+                >White spaces is invalid!</span
+              ></ng-template
+            >
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <label for="" class="form-label"
+              >Connect to Geodatabase (.gdb.zip)</label
+            >
+
+            <input type="file" class="btn-check" id="FileUpload" />
+            <!-- <input
+              type="file"
+              class="btn-check"
+              id="FileUpload"
+              (change)="selectFolder($event)"
+            /> -->
+
+            <app-upload
+              (onUploadFinished)="uploadFinished($event)"
+              (onDeleteFile)="DeleteFile()"
+              [cancelClicked]="cancelClicked"
+              [fileType]="fileType"
+              required
+            ></app-upload>
+            <div
+              *ngIf="uploadFileName?.invalid  && uploadFileName?.errors?.['required']  "
+            >
+              <span class="text-danger">File is required!</span>
+            </div>
+            <input type="hidden" formControlName="uploadFileName" />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer py-5 text-end">
+      <button
+        type="button"
+        class="btn btn-sm btn-secondary me-2"
+        (click)="close()"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="btn btn-sm btn-dark"
+        (click)="handleConnect()"
+        (keyup.enter)="handleConnect()"
+        [disabled]="!schemaDataSourceForm.valid || saving"
+      >
+        <span [ngClass]="saving ? 'inprogress' : ''">Connect</span>
+      </button>
+    </div>
+  </div>
+</ng-template>

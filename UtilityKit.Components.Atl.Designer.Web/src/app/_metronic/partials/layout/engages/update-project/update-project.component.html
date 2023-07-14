@@ -1,0 +1,74 @@
+<!--begin::Exolore drawer-->
+
+<!--begin::Card-->
+<div
+  class="card shadow-none rounded-0 w-100"
+  id="update-project"
+  data-kt-drawer="true"
+  data-kt-drawer-name="explore"
+  data-kt-drawer-activate="true"
+  data-kt-drawer-overlay="true"
+  data-kt-drawer-width="{default:'350px', 'lg': '475px'}"
+  data-kt-drawer-direction="end"
+  data-kt-drawer-toggle="#update-project_toggle"
+  data-kt-drawer-close="#update-project_close"
+>
+  <!--begin::Header-->
+  <div class="card-header" id="update-project_header">
+    <h3 class="card-title fw-bolder text-gray-700">Edit Project Data</h3>
+
+    <div class="card-toolbar">
+      <button
+        type="button"
+        class="btn btn-sm btn-icon btn-active-light-primary me-n5"
+        id="update-project_close"
+      >
+        <span
+          [inlineSVG]="'./assets/media/icons/duotune/arrows/arr061.svg'"
+          class="svg-icon svg-icon-2"
+        ></span>
+      </button>
+    </div>
+  </div>
+  <!--end::Header-->
+
+  <!--begin::Body-->
+  <div class="card-body" id="update-project_body">
+    <!--begin::Content-->
+    <div id="update-project_scroll" class="scroll-y me-n5 pe-5">
+      <form>
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label for="" class="form-label">Name</label>
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              placeholder="Name"
+            />
+          </div>
+
+          <div class="col-12 mb-4">
+            <label for="" class="form-label">Description</label>
+            <textarea
+              class="form-control form-control-sm"
+              rows="4"
+              placeholder="Description"
+            ></textarea>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!--end::Content-->
+  </div>
+  <!--end::Body-->
+  <div class="card-footer pt-0">
+    <div class="mt-5 text-end">
+      <a class="btn btn-light me-3"> Cancel </a>
+      <a class="btn btn-primary"> Update </a>
+    </div>
+  </div>
+</div>
+<!--end::Card-->
+
+<!--end::Exolore drawer-->

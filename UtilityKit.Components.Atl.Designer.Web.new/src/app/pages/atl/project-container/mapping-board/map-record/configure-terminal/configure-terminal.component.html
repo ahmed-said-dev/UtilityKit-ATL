@@ -1,0 +1,111 @@
+<ng-template let-modal #configureTerminalTemplate>
+  <div class="card shadow-sm">
+    <div class="card-header">
+      <h3 class="card-title">Configure Terminal Settings</h3>
+      <div class="card-toolbar">
+        <!--begin::Close-->
+        <div
+          class="btn btn-icon btn-sm btn-active-light ms-2"
+          (click)="close()"
+        >
+          <span class="svg-icon svg-icon-muted svg-icon-1"
+            ><svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <rect
+                opacity="0.5"
+                x="7.05025"
+                y="15.5356"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(-45 7.05025 15.5356)"
+                fill="currentColor"
+              />
+              <rect
+                x="8.46447"
+                y="7.05029"
+                width="12"
+                height="2"
+                rx="1"
+                transform="rotate(45 8.46447 7.05029)"
+                fill="currentColor"
+              />
+            </svg>
+          </span>
+          <!--end::Svg Icon-->
+        </div>
+        <!--end::Close-->
+      </div>
+    </div>
+    <div class="card-body card-scroll max-h-400px">
+      <form [formGroup]="configureTerminalForm">
+        <div class="row">
+          <div class="col-12 mb-4">
+            <label for="" class="form-label">From Terminal Device</label>
+            <select
+              class="form-select form-select-sm"
+              aria-label="type"
+              formControlName="fromTerminalFieldName"
+              [ngbTooltip]="fromTerminalFieldName?.invalid && (fromTerminalFieldName?.dirty || fromTerminalFieldName?.touched) && fromTerminalFieldName?.errors?.['required'] ? fromTerminalFieldNameRequired : ''"
+              [ngClass]="{'is-invalid': fromTerminalFieldName?.invalid && (fromTerminalFieldName?.dirty || fromTerminalFieldName?.touched) && (fromTerminalFieldName?.errors?.['required'])}"
+              (change)="selectChanged()"
+            >
+              <option [value]="null" selected disabled>
+                Select Terminal Device
+              </option>
+              <option [value]="field.name" *ngFor="let field of fields">
+                {{ field.name }}
+              </option>
+            </select>
+            <ng-template placement="top right" #fromTerminalFieldNameRequired>
+              <span class="text-danger"
+                >To terminal device is required!</span
+              ></ng-template
+            >
+          </div>
+          <div class="col-12 mb-4">
+            <label for="" class="form-label">To Terminal Device</label>
+            <select
+              class="form-select form-select-sm"
+              aria-label="type"
+              formControlName="toTerminalFieldName"
+              [ngbTooltip]="toTerminalFieldName?.invalid && (toTerminalFieldName?.dirty || toTerminalFieldName?.touched) && toTerminalFieldName?.errors?.['required'] ? toTerminalIdRequired : ''"
+              [ngClass]="{'is-invalid': toTerminalFieldName?.invalid && (toTerminalFieldName?.dirty || toTerminalFieldName?.touched) && (toTerminalFieldName?.errors?.['required'])}"
+              (change)="selectChanged()"
+            >
+              <option [value]="null" selected disabled>
+                Select Terminal Device
+              </option>
+              <option [value]="field.name" *ngFor="let field of fields">
+                {{ field.name }}
+              </option>
+            </select>
+            <ng-template placement="top right" #toTerminalIdRequired>
+              <span class="text-danger"
+                >To terminal device is required!</span
+              ></ng-template
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-footer text-end">
+      <button type="button" class="btn btn-sm btn-light me-2" (click)="close()">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-sm btn-primary"
+        [disabled]="!configureTerminalForm.valid || saving"
+        (click)="save()"
+      >
+        <span [ngClass]="saving ? 'inprogress' : ''">Save</span>
+      </button>
+    </div>
+  </div>
+</ng-template>
